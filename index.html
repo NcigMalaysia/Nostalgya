@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Tracking Pertukaran Saiz - NOSTALGYA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts untuk paparan premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcfbfa;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar untuk jadual */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- HEADER BRANDING AREA -->
+    <header class="bg-white border-b border-stone-200 shadow-sm sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col items-center justify-center">
+            <!-- Logo Container -->
+            <div class="w-full max-w-xl overflow-hidden rounded-md flex justify-center mb-1">
+                <img src="image_ac748b.png" alt="Header NOSTALGYA" class="max-h-16 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/600x100/ffffff/000000?text=NOSTALGYA';">
+            </div>
+            <p class="text-xs tracking-widest text-stone-500 uppercase font-semibold">Sistem Pengurusan & Penjejakan Pertukaran Saiz</p>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-[96rem] w-full mx-auto px-4 py-6">
+        
+        <!-- DASHBOARD STATS -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-stone-500">Jumlah Permohonan</p>
+                    <h3 class="text-3xl font-bold mt-1 text-stone-800" id="stat-total">0</h3>
+                </div>
+                <div class="p-3 bg-stone-100 rounded-xl text-stone-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-amber-600">Sedang Diproses (Processing)</p>
+                    <h3 class="text-3xl font-bold mt-1 text-amber-700" id="stat-processing">0</h3>
+                </div>
+                <div class="p-3 bg-amber-50 rounded-xl text-amber-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-emerald-600">Selesai (Done Replace)</p>
+                    <h3 class="text-3xl font-bold mt-1 text-emerald-700" id="stat-done">0</h3>
+                </div>
+                <div class="p-3 bg-emerald-50 rounded-xl text-emerald-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN LAYOUT: FORM & TABLE -->
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+            
+            <!-- FORM COLUMN -->
+            <div class="xl:col-span-1">
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm sticky top-24">
+                    <div class="flex items-center space-x-2 mb-5 pb-3 border-b border-stone-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        <h2 class="text-lg font-bold text-stone-800">Daftar Pertukaran Baru</h2>
+                    </div>
+                    
+                    <form id="exchange-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
+                        <!-- Nama Pelanggan -->
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="cust-name">Nama Pelanggan <span class="text-red-500">*</span></label>
+                            <input type="text" id="cust-name" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                        </div>
+
+                        <!-- No Order -->
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="order-num">No. Pesanan / Order ID <span class="text-red-500">*</span></label>
+                            <input type="text" id="order-num" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                        </div>
+
+                        <!-- MAKLUMAT MAHSUL / PRODUK ASAL -->
+                        <div class="border-t border-stone-100 pt-4">
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-original-select">Produk <span class="text-red-500">*</span></label>
+                            <select id="product-original-select" required onchange="handleProductChange('original', this.value)" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
+                                <option value="" disabled selected>Pilih Produk...</option>
+                                <option value="Wide Cut Trousers">Wide Cut Trousers</option>
+                                <option value="Rick Pants">Rick Pants</option>
+                                <option value="Slim Fit Tee">Slim Fit Tee</option>
+                                <option value="Vintage Tee">Vintage Tee</option>
+                                <option value="Muscle Tee">Muscle Tee</option>
+                                <option value="Overlay Tee">Overlay Tee</option>
+                                <option value="Black Jacket">Black Jacket</option>
+                                <option value="Wool Sweater (Grey)">Wool Sweater (Grey)</option>
+                                <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
+                                <option value="Card Holder">Card Holder</option>
+                                <option value="Journal">Journal</option>
+                                <option value="custom">Lain-lain / Custom...</option>
+                            </select>
+                            
+                            <div id="custom-original-container" class="hidden mt-2">
+                                <input type="text" id="product-original-custom" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <!-- GRID SAIZ (ASAL & BARU) -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-original">Saiz Asal <span class="text-red-500">*</span></label>
+                                <input type="text" id="size-original" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-new">Saiz Baru <span class="text-red-500">*</span></label>
+                                <input type="text" id="size-new" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                            </div>
+                        </div>
+
+                        <!-- PILIHAN KHAS UNTUK TUKAR PRODUK LAIN -->
+                        <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-150 mt-2">
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="toggle-product-change" onchange="toggleProductChangeSection(this.checked)" class="w-4 h-4 rounded text-stone-900 border-stone-300 focus:ring-stone-500 cursor-pointer">
+                                <span class="text-xs font-bold text-stone-700 tracking-wide select-none">Tukar ke produk lain juga?</span>
+                            </label>
+                            
+                            <!-- BAHAGIAN PILIH PRODUK BARU (Disembunyikan secara lalai) -->
+                            <div id="product-change-section" class="hidden mt-3 pt-3 border-t border-stone-200/60 animate-fadeIn">
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-new-select">Produk Pengganti Baru <span class="text-red-500">*</span></label>
+                                <select id="product-new-select" onchange="handleProductChange('new', this.value)" class="w-full px-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 transition-all text-sm cursor-pointer">
+                                    <option value="" disabled selected>Pilih Produk Baru...</option>
+                                    <option value="Wide Cut Trousers">Wide Cut Trousers</option>
+                                    <option value="Rick Pants">Rick Pants</option>
+                                    <option value="Slim Fit Tee">Slim Fit Tee</option>
+                                    <option value="Vintage Tee">Vintage Tee</option>
+                                    <option value="Muscle Tee">Muscle Tee</option>
+                                    <option value="Overlay Tee">Overlay Tee</option>
+                                    <option value="Black Jacket">Black Jacket</option>
+                                    <option value="Wool Sweater (Grey)">Wool Sweater (Grey)</option>
+                                    <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
+                                    <option value="Card Holder">Card Holder</option>
+                                    <option value="Journal">Journal</option>
+                                    <option value="custom">Lain-lain / Custom...</option>
+                                </select>
+                                
+                                <div id="custom-new-container" class="hidden mt-2">
+                                    <input type="text" id="product-new-custom" class="w-full px-4 py-2 bg-white border border-stone-200 rounded-xl focus:outline-none text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nota / Catatan Operasi -->
+                        <div class="border-t border-stone-100 pt-4">
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="exchange-notes">Nota / Catatan Operasi <span class="text-stone-400">(Pilihan)</span></label>
+                            <textarea id="exchange-notes" rows="2" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm resize-none"></textarea>
+                        </div>
+
+                        <!-- No Tracking -->
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="tracking-num">No. Tracking Postage <span class="text-stone-400">(Pilihan)</span></label>
+                            <input type="text" id="tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                        </div>
+
+                        <!-- Status Awal -->
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="status-select">Status</label>
+                            <select id="status-select" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
+                                <option value="processing" selected>🔄 Processing</option>
+                                <option value="done">✅ Done Replace</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2 text-sm mt-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span>Simpan Rekod</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TABLE COLUMN -->
+            <div class="xl:col-span-3 space-y-4">
+                
+                <!-- FILTER & SEARCH BAR -->
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <!-- Search Input -->
+                    <div class="relative flex-grow max-w-md">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" id="search-bar" oninput="filterData()" placeholder="Cari pelanggan, order ID, produk, atau nota..." class="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                    </div>
+
+                    <!-- Status Filter Buttons -->
+                    <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl text-xs font-medium">
+                        <button onclick="setStatusFilter('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm">Semua</button>
+                        <button onclick="setStatusFilter('processing')" id="btn-filter-processing" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Processing</button>
+                        <button onclick="setStatusFilter('done')" id="btn-filter-done" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Done</button>
+                    </div>
+                </div>
+
+                <!-- LIST OF TRANSACTIONS -->
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-stone-100 flex justify-between items-center bg-white">
+                        <h3 class="font-bold text-stone-800 text-base">Senarai Pertukaran Saiz & Produk</h3>
+                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors">Padam Semua</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[900px]">
+                            <thead>
+                                <tr class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wider font-semibold border-b border-stone-100">
+                                    <th class="px-6 py-3.5" style="width: 15%;">Pelanggan</th>
+                                    <th class="px-4 py-3.5" style="width: 12%;">Order ID</th>
+                                    <th class="px-4 py-3.5" style="width: 25%;">Catatan Operasi</th>
+                                    <th class="px-4 py-3.5" style="width: 23%;">Perincian Pertukaran</th>
+                                    <th class="px-4 py-3.5" style="width: 15%;">No. Tracking</th>
+                                    <th class="px-4 py-3.5 text-center" style="width: 5%;">Status</th>
+                                    <th class="px-6 py-3.5 text-right" style="width: 5%;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody" class="divide-y divide-stone-100 text-sm">
+                                <!-- Data will be populated here by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="hidden flex flex-col items-center justify-center py-12 px-4 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-stone-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0V9a2 2 0 00-2-2H6a2 2 0 00-2 2v2m0 4h18" />
+                        </svg>
+                        <p class="text-stone-500 font-medium text-sm">Tiada rekod ditemui</p>
+                        <p class="text-stone-400 text-xs mt-1">Masukkan rekod baharu di borang sebelah kiri.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- CUSTOM CONFIRM MODAL -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl transform scale-95 transition-transform duration-200">
+            <h3 class="text-lg font-bold text-stone-800 mb-2">Konfirmasi Tindakan</h3>
+            <p id="confirm-message" class="text-stone-600 text-sm mb-6">Adakah anda pasti mahu melakukan tindakan ini?</p>
+            <div class="flex justify-end space-x-3 text-sm font-semibold">
+                <button id="confirm-cancel-btn" class="px-4 py-2 text-stone-500 hover:text-stone-700 hover:bg-stone-50 rounded-xl transition-all">Batal</button>
+                <button id="confirm-ok-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all">Ya, Padam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-stone-200 py-6 mt-12 text-center text-xs text-stone-400">
+        <p>© 2026 NOSTALGYA™. Hak Cipta Terpelihara. Sistem dibangunkan untuk pengurusan dalaman sahaja.</p>
+    </footer>
+
+    <!-- TOAST POPUP NOTIFICATION -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-stone-900 text-white px-5 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-2 z-50 text-sm">
+        <span id="toast-icon">✅</span>
+        <span id="toast-message">Mesej berjaya dimasukkan!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Default Mock Data - Kosong secara lalai
+        const initialMockData = [];
+
+        let exchanges = [];
+        let currentFilter = 'all';
+        let pendingDeleteId = null;
+        let isDeleteAll = false;
+
+        // On window load
+        window.onload = function() {
+            const savedData = localStorage.getItem('nostalgya_exchanges_v4');
+            if (savedData) {
+                exchanges = JSON.parse(savedData);
+            } else {
+                exchanges = initialMockData;
+                saveToLocalStorage();
+            }
+            renderData();
+
+            // Set up Modal listeners
+            document.getElementById('confirm-cancel-btn').addEventListener('click', hideConfirmModal);
+            document.getElementById('confirm-ok-btn').addEventListener('click', executeConfirmedAction);
+        };
+
+        function saveToLocalStorage() {
+            localStorage.setItem('nostalgya_exchanges_v4', JSON.stringify(exchanges));
+        }
+
+        // Handle Custom Product dropdown logic
+        function handleProductChange(type, val) {
+            const containerId = type === 'original' ? 'custom-original-container' : 'custom-new-container';
+            const inputId = type === 'original' ? 'product-original-custom' : 'product-new-custom';
+            
+            const container = document.getElementById(containerId);
+            const input = document.getElementById(inputId);
+            
+            if (val === 'custom') {
+                container.classList.remove('hidden');
+                input.setAttribute('required', 'true');
+            } else {
+                container.classList.add('hidden');
+                input.removeAttribute('required');
+                input.value = '';
+            }
+        }
+
+        // Toggle "Tukar ke produk lain" section
+        function toggleProductChangeSection(isChecked) {
+            const section = document.getElementById('product-change-section');
+            const selectNew = document.getElementById('product-new-select');
+            const customInput = document.getElementById('product-new-custom');
+            
+            if (isChecked) {
+                section.classList.remove('hidden');
+                selectNew.setAttribute('required', 'true');
+            } else {
+                section.classList.add('hidden');
+                selectNew.removeAttribute('required');
+                selectNew.value = '';
+                
+                // Reset custom product state if hidden
+                document.getElementById('custom-new-container').classList.add('hidden');
+                customInput.removeAttribute('required');
+                customInput.value = '';
+            }
+        }
+
+        // Form Submit Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('cust-name').value.trim();
+            const orderNum = document.getElementById('order-num').value.trim();
+            const notes = document.getElementById('exchange-notes').value.trim();
+            
+            // Get original product
+            const origSelect = document.getElementById('product-original-select').value;
+            let productOriginal = origSelect;
+            if (origSelect === 'custom') {
+                productOriginal = document.getElementById('product-original-custom').value.trim();
+                if (!productOriginal) productOriginal = "Produk Kustom";
+            }
+
+            // Get replacement product
+            const isProductChanged = document.getElementById('toggle-product-change').checked;
+            let productNew = productOriginal; // Default: same product
+
+            if (isProductChanged) {
+                const newSelect = document.getElementById('product-new-select').value;
+                if (newSelect === 'custom') {
+                    productNew = document.getElementById('product-new-custom').value.trim();
+                    if (!productNew) productNew = "Produk Kustom";
+                } else if (newSelect) {
+                    productNew = newSelect;
+                }
+            }
+
+            const sizeOriginal = document.getElementById('size-original').value.trim().toUpperCase();
+            const sizeNew = document.getElementById('size-new').value.trim().toUpperCase();
+            const trackingNum = document.getElementById('tracking-num').value.trim();
+            const status = document.getElementById('status-select').value;
+            
+            const newExchange = {
+                id: Date.now().toString(),
+                name,
+                orderNum,
+                productOriginal,
+                sizeOriginal,
+                productNew,
+                sizeNew,
+                trackingNum,
+                notes,
+                status,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            exchanges.unshift(newExchange);
+            saveToLocalStorage();
+            renderData();
+            
+            // Reset Form and elements
+            document.getElementById('exchange-form').reset();
+            document.getElementById('custom-original-container').classList.add('hidden');
+            document.getElementById('custom-new-container').classList.add('hidden');
+            document.getElementById('product-change-section').classList.add('hidden');
+            document.getElementById('product-original-custom').removeAttribute('required');
+            document.getElementById('product-new-select').removeAttribute('required');
+            document.getElementById('product-new-custom').removeAttribute('required');
+            
+            showToast('✅ Rekod pertukaran berjaya disimpan!');
+        }
+
+        // Toast alert
+        function showToast(message, icon = '✅') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-icon').innerText = icon;
+            document.getElementById('toast-message').innerText = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Custom Confirm Modals
+        function showConfirmModal(message, isAll = false, id = null) {
+            pendingDeleteId = id;
+            isDeleteAll = isAll;
+            
+            document.getElementById('confirm-message').innerText = message;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                pendingDeleteId = null;
+                isDeleteAll = false;
+            }, 200);
+        }
+
+        function executeConfirmedAction() {
+            if (isDeleteAll) {
+                exchanges = [];
+                saveToLocalStorage();
+                renderData();
+                showToast('Semua data berjaya dipadam.', '🧹');
+            } else if (pendingDeleteId) {
+                exchanges = exchanges.filter(item => item.id !== pendingDeleteId);
+                saveToLocalStorage();
+                renderData();
+                showToast('Rekod berjaya dipadam.', '🗑️');
+            }
+            hideConfirmModal();
+        }
+
+        // Live update notes from table
+        // Live update notes from table
+        function updateNotes(id, value) {
+            exchanges = exchanges.map(item => {
+                if (item.id === id) {
+                    return { ...item, notes: value.trim() };
+                }
+                return item;
+            });
+            saveToLocalStorage();
+            renderData();
+            showToast('Nota operasi dikemaskini!', '📝');
+        }
+
+        // Live update order number from table
+        function updateOrderNum(id, value) {
+            exchanges = exchanges.map(item => {
+                if (item.id === id) {
+                    return { ...item, orderNum: value.trim() };
+                }
+                return item;
+            });
+            saveToLocalStorage();
+            renderData();
+            showToast('Nombor pesanan dikemaskini!', '🆔');
+        }
+
+        // Table Render Logic
+        function renderData() {
+            const tbody = document.getElementById('orders-tbody');
+            const searchVal = document.getElementById('search-bar').value.toLowerCase();
+            
+            let filtered = exchanges;
+            
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(item => item.status === currentFilter);
+            }
+            
+            if (searchVal) {
+                filtered = filtered.filter(item => 
+                    item.name.toLowerCase().includes(searchVal) || 
+                    item.orderNum.toLowerCase().includes(searchVal) ||
+                    (item.productOriginal && item.productOriginal.toLowerCase().includes(searchVal)) ||
+                    (item.productNew && item.productNew.toLowerCase().includes(searchVal)) ||
+                    (item.notes && item.notes.toLowerCase().includes(searchVal)) ||
+                    item.trackingNum.toLowerCase().includes(searchVal)
+                );
+            }
+
+            updateStats();
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('empty-state').classList.add('hidden');
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-stone-50/50 transition-colors";
+
+                const isDone = item.status === 'done';
+                const statusBadge = isDone 
+                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500"></span>Done Replace
+                       </span>`
+                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100">
+                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500 animate-pulse"></span>Processing
+                       </span>`;
+
+                const origProd = item.productOriginal || item.product || 'Produk';
+                const origSize = item.sizeOriginal || 'N/A';
+                const newProd = item.productNew || origProd; // Fallback to same product
+                const newSize = item.sizeNew || 'N/A';
+
+                const isSameProduct = origProd === newProd;
+
+                // Render dynamic layout based on whether they changed products, or just sizes
+                let detailColumnMarkup = "";
+                if (isSameProduct) {
+                    detailColumnMarkup = `
+                        <div class="flex flex-col space-y-1">
+                            <span class="text-xs font-semibold text-stone-700">
+                                🏷️ ${escapeHtml(origProd)}
+                            </span>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-stone-100 text-stone-800 px-2 py-0.5 rounded text-[11px] font-bold border border-stone-200">${escapeHtml(origSize)}</span>
+                                <span class="text-stone-400 font-bold text-xs">➔</span>
+                                <span class="bg-stone-900 text-white px-2 py-0.5 rounded text-[11px] font-bold shadow-sm">${escapeHtml(newSize)}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    detailColumnMarkup = `
+                        <div class="flex flex-col space-y-1">
+                            <div class="flex items-center mb-0.5">
+                                <span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100 uppercase tracking-wider">Tukar Produk</span>
+                            </div>
+                            <div class="flex flex-col space-y-1">
+                                <!-- Original Product & Size -->
+                                <span class="text-xs text-stone-500 font-medium bg-stone-100 px-2 py-0.5 rounded border border-stone-200 inline-block truncate max-w-[200px]" title="${escapeHtml(origProd)} (${escapeHtml(origSize)})">
+                                    ${escapeHtml(origProd)} <strong>(${escapeHtml(origSize)})</strong>
+                                </span>
+                                
+                                <span class="text-stone-400 font-bold text-[10px] pl-2">➔</span>
+                                
+                                <!-- New Product & Size -->
+                                <span class="text-xs text-white font-medium bg-stone-800 px-2 py-0.5 rounded shadow-sm inline-block truncate max-w-[200px]" title="${escapeHtml(newProd)} (${escapeHtml(newSize)})">
+                                    ${escapeHtml(newProd)} <strong>(${escapeHtml(newSize)})</strong>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 align-top">
+                        <div class="font-bold text-stone-800">${escapeHtml(item.name)}</div>
+                        <span class="text-[9px] text-stone-400 mt-1.5 block font-medium">Didaftar: ${item.date}</span>
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        <input type="text" value="${escapeHtml(item.orderNum)}" 
+                            onchange="updateOrderNum('${item.id}', this.value)"
+                            class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 font-bold w-full transition-all">
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        <textarea 
+                            onchange="updateNotes('${item.id}', this.value)"
+                            placeholder="Klik untuk tulis catatan..."
+                            class="w-full bg-amber-50/20 hover:bg-amber-50/50 focus:bg-white text-xs text-stone-700 p-2 rounded-xl border border-dashed border-stone-200 hover:border-amber-300/80 focus:border-amber-400 focus:outline-none transition-all resize-none font-medium placeholder-stone-400/80"
+                            rows="2"
+                        >${escapeHtml(item.notes || '')}</textarea>
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        ${detailColumnMarkup}
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        <div class="flex items-center space-x-1">
+                            <input type="text" value="${escapeHtml(item.trackingNum)}" 
+                                placeholder="Klik untuk tambah" 
+                                onchange="updateTracking('${item.id}', this.value)"
+                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono">
+                            ${item.trackingNum ? `
+                                <button onclick="copyToClipboard('${escapeHtml(item.trackingNum)}')" class="p-1 text-stone-400 hover:text-stone-700" title="Salin No Tracking">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
+                                    </svg>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                    <td class="px-4 py-4 text-center align-top">
+                        <div class="inline-block cursor-pointer" onclick="toggleStatus('${item.id}')" title="Klik untuk tukar status">
+                            ${statusBadge}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-right align-top">
+                        <div class="flex items-center justify-end space-x-2">
+                            <button onclick="toggleStatus('${item.id}')" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition-colors" title="Ubah Status">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+                                </svg>
+                            </button>
+                            <button onclick="deleteRecord('${item.id}')" class="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" title="Padam Rekod">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Stats summary calculation
+        function updateStats() {
+            const total = exchanges.length;
+            const processing = exchanges.filter(item => item.status === 'processing').length;
+            const done = exchanges.filter(item => item.status === 'done').length;
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-processing').innerText = processing;
+            document.getElementById('stat-done').innerText = done;
+        }
+
+        // Status Tabs Filtering
+        function setStatusFilter(filter) {
+            currentFilter = filter;
+            
+            const buttons = {
+                all: document.getElementById('btn-filter-all'),
+                processing: document.getElementById('btn-filter-processing'),
+                done: document.getElementById('btn-filter-done')
+            };
+
+            Object.keys(buttons).forEach(key => {
+                if (key === filter) {
+                    buttons[key].className = "px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm";
+                } else {
+                    buttons[key].className = "px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800";
+                }
+            });
+
+            renderData();
+        }
+
+        function filterData() {
+            renderData();
+        }
+
+        // Fast status flip
+        function toggleStatus(id) {
+            exchanges = exchanges.map(item => {
+                if (item.id === id) {
+                    const nextStatus = item.status === 'done' ? 'processing' : 'done';
+                    const msg = nextStatus === 'done' ? 'Selesai diganti! ✅' : 'Ditukar ke Processing 🔄';
+                    showToast(msg);
+                    return { ...item, status: nextStatus };
+                }
+                return item;
+            });
+            saveToLocalStorage();
+            renderData();
+        }
+
+        // Fast Tracking Update
+        function updateTracking(id, value) {
+            exchanges = exchanges.map(item => {
+                if (item.id === id) {
+                    return { ...item, trackingNum: value.trim() };
+                }
+                return item;
+            });
+            saveToLocalStorage();
+            renderData();
+            showToast('No. Tracking berjaya dikemaskini!', '📦');
+        }
+
+        // Copy tracking
+        function copyToClipboard(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast('No. Tracking disalin ke clipboard!', '📋');
+        }
+
+        // Delete handlers
+        function deleteRecord(id) {
+            const target = exchanges.find(item => item.id === id);
+            if (!target) return;
+            showConfirmModal(`Adakah anda pasti mahu memadam rekod pertukaran untuk "${target.name}"?`, false, id);
+        }
+
+        // Clear all data
+        function clearAllData() {
+            showConfirmModal('ADAKAH ANDA PASTI? Tindakan ini akan memadam semua rekod data pertukaran dari penyimpanan pelayar anda secara kekal!', true);
+        }
+
+        // XSS Prevention
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
