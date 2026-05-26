@@ -591,8 +591,8 @@
                 const list = [];
                 snapshot.forEach((doc) => {
                     list.push({
-                        id: doc.id,
-                        ...doc.data()
+    ...doc.data(),
+    id: doc.id
                     });
                 });
 
