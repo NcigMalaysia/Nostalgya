@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Tracking Pertukaran Saiz - NOSTALGYA</title>
+    <title>Size Exchange Tracking System - NOSTALGYA</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts untuk paparan premium -->
+    <!-- Google Fonts for premium display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
         .serif-title {
             font-family: 'Playfair Display', serif;
         }
-        /* Custom scrollbar untuk jadual */
+        /* Custom scrollbar for table area */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -40,22 +40,33 @@
 
     <!-- HEADER BRANDING AREA -->
     <header class="bg-white border-b border-stone-200 shadow-sm sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col items-center justify-center">
+        <div class="max-w-[98rem] mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex-1 hidden sm:block"></div>
             <!-- Logo Container -->
-            <div class="w-full max-w-xl overflow-hidden rounded-md flex justify-center mb-1">
-                <img src="image_ac748b.png" alt="Header NOSTALGYA" class="max-h-16 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/600x100/ffffff/000000?text=NOSTALGYA';">
+            <div class="flex-1 flex flex-col items-center justify-center">
+                <div class="w-full max-w-xs overflow-hidden rounded-md flex justify-center mb-1">
+                    <img src="image_ac748b.png" alt="Header NOSTALGYA" class="max-h-12 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/600x100/ffffff/000000?text=NOSTALGYA';">
+                </div>
+                <p class="text-[10px] tracking-widest text-stone-500 uppercase font-semibold">Size Exchange Management & Tracking System</p>
             </div>
-            <p class="text-xs tracking-widest text-stone-500 uppercase font-semibold">Sistem Pengurusan & Penjejakan Pertukaran Saiz</p>
+            
+            <!-- Connection Status Indicator -->
+            <div class="flex-1 flex justify-end">
+                <div id="connection-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-100">
+                    <span class="w-2 h-2 mr-2 rounded-full bg-amber-500 animate-pulse" id="connection-dot"></span>
+                    <span id="connection-text">Detecting Connection...</span>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-[96rem] w-full mx-auto px-4 py-6">
+    <main class="flex-grow max-w-[98rem] w-full mx-auto px-4 py-6">
         
         <!-- DASHBOARD STATS -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-stone-500">Jumlah Permohonan</p>
+                    <p class="text-sm font-medium text-stone-500">Total Applications</p>
                     <h3 class="text-3xl font-bold mt-1 text-stone-800" id="stat-total">0</h3>
                 </div>
                 <div class="p-3 bg-stone-100 rounded-xl text-stone-700">
@@ -67,7 +78,7 @@
             
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-amber-600">Sedang Diproses (Processing)</p>
+                    <p class="text-sm font-medium text-amber-600">Processing</p>
                     <h3 class="text-3xl font-bold mt-1 text-amber-700" id="stat-processing">0</h3>
                 </div>
                 <div class="p-3 bg-amber-50 rounded-xl text-amber-600">
@@ -79,7 +90,7 @@
             
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-emerald-600">Selesai (Done Replace)</p>
+                    <p class="text-sm font-medium text-emerald-600">Done Replace</p>
                     <h3 class="text-3xl font-bold mt-1 text-emerald-700" id="stat-done">0</h3>
                 </div>
                 <div class="p-3 bg-emerald-50 rounded-xl text-emerald-600">
@@ -90,37 +101,69 @@
             </div>
         </section>
 
-        <!-- MAIN LAYOUT: FORM & TABLE -->
-        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        <!-- MAIN LAYOUT: FLEXIBLE SIZABLE COLUMNS -->
+        <div class="flex flex-col xl:flex-row gap-6 items-start relative">
             
-            <!-- FORM COLUMN -->
-            <div class="xl:col-span-1">
-                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm sticky top-24">
-                    <div class="flex items-center space-x-2 mb-5 pb-3 border-b border-stone-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                        </svg>
-                        <h2 class="text-lg font-bold text-stone-800">Daftar Pertukaran Baru</h2>
+            <!-- FORM COLUMN (COLLAPSIBLE SIDEBAR) -->
+            <div id="sidebar-panel" class="w-full xl:w-96 flex-shrink-0 transition-all duration-300 ease-in-out">
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm relative">
+                    
+                    <!-- Hide Sidebar Arrow Button -->
+                    <button onclick="toggleSidebar(false)" class="absolute right-4 top-4 p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Collapse Form">
+                        <div class="flex items-center space-x-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider">◀ Collapse</span>
+                        </div>
+                    </button>
+
+                    <div class="flex items-center justify-between mb-5 pb-3 border-b border-stone-100 pr-20">
+                        <div class="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                            <h2 class="text-lg font-bold text-stone-800">Add Record</h2>
+                        </div>
+                        
+                        <!-- Settings Icon for Firebase Setup -->
+                        <button onclick="toggleFirebaseSettings()" class="p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Configure Cloud Database">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- CLOUD CONFIG PANEL (Hidden by Default) -->
+                    <div id="firebase-settings-panel" class="hidden mb-6 p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs space-y-3 animate-fadeIn">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-stone-700">Firebase Cloud Settings</span>
+                            <button type="button" onclick="toggleFirebaseSettings()" class="text-stone-400 hover:text-stone-600">Close</button>
+                        </div>
+                        <p class="text-stone-500 leading-relaxed">Paste your <strong>Firebase Config</strong> object below to enable live shared database synchronization with your operations team on GitHub.</p>
+                        <textarea id="firebase-config-input" rows="4" placeholder='{"apiKey": "...", "projectId": "...", ...}' class="w-full p-2 border border-stone-200 rounded-lg focus:outline-none font-mono text-[10px]"></textarea>
+                        <div class="flex space-x-2">
+                            <button type="button" onclick="saveFirebaseConfig()" class="flex-1 bg-stone-900 text-white font-medium py-1.5 rounded-lg hover:bg-stone-800 transition-colors">Connect</button>
+                            <button type="button" onclick="resetToLocal()" class="flex-1 bg-stone-200 text-stone-700 font-medium py-1.5 rounded-lg hover:bg-stone-300 transition-colors">Use Local</button>
+                        </div>
                     </div>
                     
                     <form id="exchange-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
-                        <!-- Nama Pelanggan -->
+                        <!-- Customer Name -->
                         <div>
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="cust-name">Nama Pelanggan <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="cust-name">Customer Name <span class="text-red-500">*</span></label>
                             <input type="text" id="cust-name" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                         </div>
 
-                        <!-- No Order -->
+                        <!-- Order ID -->
                         <div>
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="order-num">No. Pesanan / Order ID <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="order-num">Order ID / Reference No <span class="text-red-500">*</span></label>
                             <input type="text" id="order-num" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                         </div>
 
-                        <!-- MAKLUMAT MAHSUL / PRODUK ASAL -->
+                        <!-- ORIGINAL ITEM INFO -->
                         <div class="border-t border-stone-100 pt-4">
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-original-select">Produk <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-original-select">Product Name <span class="text-red-500">*</span></label>
                             <select id="product-original-select" required onchange="handleProductChange('original', this.value)" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
-                                <option value="" disabled selected>Pilih Produk...</option>
+                                <option value="" disabled selected>Select Product...</option>
                                 <option value="Wide Cut Trousers">Wide Cut Trousers</option>
                                 <option value="studio trousers">studio trousers</option>
                                 <option value="Slim Fit Tee">Slim Fit Tee</option>
@@ -132,7 +175,7 @@
                                 <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
                                 <option value="Card Holder">Card Holder</option>
                                 <option value="Journal">Journal</option>
-                                <option value="custom">Lain-lain / Custom...</option>
+                                <option value="custom">Other / Custom...</option>
                             </select>
                             
                             <div id="custom-original-container" class="hidden mt-2">
@@ -140,30 +183,30 @@
                             </div>
                         </div>
 
-                        <!-- GRID SAIZ (ASAL & BARU) -->
+                        <!-- SIZES GRID -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-original">Saiz Asal <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-original">Original Size <span class="text-red-500">*</span></label>
                                 <input type="text" id="size-original" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-new">Saiz Baru <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-new">Exchange Size <span class="text-red-500">*</span></label>
                                 <input type="text" id="size-new" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                             </div>
                         </div>
 
-                        <!-- PILIHAN KHAS UNTUK TUKAR PRODUK LAIN -->
+                        <!-- PRODUCT EXCHANGE TOGGLE -->
                         <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-150 mt-2">
                             <label class="flex items-center space-x-2.5 cursor-pointer">
                                 <input type="checkbox" id="toggle-product-change" onchange="toggleProductChangeSection(this.checked)" class="w-4 h-4 rounded text-stone-900 border-stone-300 focus:ring-stone-500 cursor-pointer">
-                                <span class="text-xs font-bold text-stone-700 tracking-wide select-none">Tukar ke produk lain juga?</span>
+                                <span class="text-xs font-bold text-stone-700 tracking-wide select-none">Exchange for a different product?</span>
                             </label>
                             
-                            <!-- BAHAGIAN PILIH PRODUK BARU (Disembunyikan secara lalai) -->
-                            <div id="product-change-section" class="hidden mt-3 pt-3 border-t border-stone-200/60 animate-fadeIn">
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-new-select">Produk Pengganti Baru <span class="text-red-500">*</span></label>
+                            <!-- ALTERNATIVE NEW PRODUCT SECTION -->
+                            <div id="product-change-section" class="hidden mt-3 pt-3 border-t border-stone-200/60">
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-new-select">New Product Name <span class="text-red-500">*</span></label>
                                 <select id="product-new-select" onchange="handleProductChange('new', this.value)" class="w-full px-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 transition-all text-sm cursor-pointer">
-                                    <option value="" disabled selected>Pilih Produk Baru...</option>
+                                    <option value="" disabled selected>Select Replacement...</option>
                                     <option value="Wide Cut Trousers">Wide Cut Trousers</option>
                                     <option value="studio trousers">studio trousers</option>
                                     <option value="Slim Fit Tee">Slim Fit Tee</option>
@@ -175,7 +218,7 @@
                                     <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
                                     <option value="Card Holder">Card Holder</option>
                                     <option value="Journal">Journal</option>
-                                    <option value="custom">Lain-lain / Custom...</option>
+                                    <option value="custom">Other / Custom...</option>
                                 </select>
                                 
                                 <div id="custom-new-container" class="hidden mt-2">
@@ -184,19 +227,25 @@
                             </div>
                         </div>
 
-                        <!-- Nota / Catatan Operasi -->
+                        <!-- Operations Notes -->
                         <div class="border-t border-stone-100 pt-4">
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="exchange-notes">Nota / Catatan Operasi <span class="text-stone-400">(Pilihan)</span></label>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="exchange-notes">Operations Notes <span class="text-stone-400">(Optional)</span></label>
                             <textarea id="exchange-notes" rows="2" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm resize-none"></textarea>
                         </div>
 
-                        <!-- No Tracking -->
-                        <div>
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="tracking-num">No. Tracking Postage <span class="text-stone-400">(Pilihan)</span></label>
+                        <!-- No. Tracking Return -->
+                        <div class="border-t border-stone-100 pt-4">
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="tracking-num">Return Tracking No <span class="text-stone-400">(Customer ➔ Us)</span></label>
                             <input type="text" id="tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                         </div>
 
-                        <!-- Status Awal -->
+                        <!-- No. Tracking Baru (Postage Out) -->
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="new-tracking-num">New Tracking No <span class="text-stone-400">(Us ➔ Customer)</span></label>
+                            <input type="text" id="new-tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                        </div>
+
+                        <!-- Status Select -->
                         <div>
                             <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="status-select">Status</label>
                             <select id="status-select" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
@@ -209,15 +258,26 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
-                            <span>Simpan Rekod</span>
+                            <span>Save Record</span>
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- TABLE COLUMN -->
-            <div class="xl:col-span-3 space-y-4">
+            <!-- TABEL DAN PANEL SENARAI (W-FULL / ADJUSTABLE FLEX-GROW) -->
+            <div id="table-panel" class="flex-grow w-full space-y-4 transition-all duration-300 ease-in-out">
                 
+                <!-- Open Sidebar Toggle Button -->
+                <div class="flex items-center justify-between gap-4">
+                    <button id="sidebar-toggle-open" onclick="toggleSidebar(true)" class="hidden xl:flex items-center space-x-2 bg-stone-900 text-white px-4 py-2.5 rounded-xl shadow-md hover:bg-stone-800 transition-colors text-sm font-semibold" title="Open Registration Form">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span>Add New Record (▶ Form)</span>
+                    </button>
+                    <div class="flex-grow"></div>
+                </div>
+
                 <!-- FILTER & SEARCH BAR -->
                 <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <!-- Search Input -->
@@ -227,39 +287,45 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </span>
-                        <input type="text" id="search-bar" oninput="filterData()" placeholder="Cari pelanggan, order ID, produk, atau nota..." class="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                        <input type="text" id="search-bar" oninput="filterData()" placeholder="Search customer, order ID, product, or notes..." class="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                     </div>
 
                     <!-- Status Filter Buttons -->
                     <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl text-xs font-medium">
-                        <button onclick="setStatusFilter('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm">Semua</button>
+                        <button onclick="setStatusFilter('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm">All</button>
                         <button onclick="setStatusFilter('processing')" id="btn-filter-processing" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Processing</button>
-                        <button onclick="setStatusFilter('done')" id="btn-filter-done" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Done</button>
+                        <button onclick="setStatusFilter('done')" id="btn-filter-done" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Done Replace</button>
                     </div>
                 </div>
 
                 <!-- LIST OF TRANSACTIONS -->
                 <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 border-b border-stone-100 flex justify-between items-center bg-white">
-                        <h3 class="font-bold text-stone-800 text-base">Senarai Pertukaran Saiz & Produk</h3>
-                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors">Padam Semua</button>
+                        <div class="flex items-center space-x-2">
+                            <h3 class="font-bold text-stone-800 text-base">Exchange List</h3>
+                            <button id="sidebar-mobile-trigger" onclick="toggleSidebar(true)" class="xl:hidden inline-flex items-center text-xs text-stone-500 hover:text-stone-900 border border-stone-200 bg-stone-50 px-2 py-1 rounded">
+                                ➕ Add Record
+                            </button>
+                        </div>
+                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors">Delete All Data</button>
                     </div>
                     
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[900px]">
+                        <table class="w-full text-left border-collapse min-w-[1100px]">
                             <thead>
                                 <tr class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wider font-semibold border-b border-stone-100">
-                                    <th class="px-6 py-3.5" style="width: 15%;">Pelanggan</th>
-                                    <th class="px-4 py-3.5" style="width: 12%;">Order ID</th>
-                                    <th class="px-4 py-3.5" style="width: 25%;">Catatan Operasi</th>
-                                    <th class="px-4 py-3.5" style="width: 23%;">Perincian Pertukaran</th>
-                                    <th class="px-4 py-3.5" style="width: 15%;">No. Tracking</th>
+                                    <th class="px-6 py-3.5" style="width: 15%;">Customer</th>
+                                    <th class="px-4 py-3.5" style="width: 10%;">Order ID</th>
+                                    <th class="px-4 py-3.5" style="width: 22%;">Operations Notes</th>
+                                    <th class="px-4 py-3.5" style="width: 22%;">Exchange Details</th>
+                                    <th class="px-4 py-3.5" style="width: 13%;">Return Tracking</th>
                                     <th class="px-4 py-3.5 text-center" style="width: 5%;">Status</th>
-                                    <th class="px-6 py-3.5 text-right" style="width: 5%;">Aksi</th>
+                                    <th class="px-4 py-3.5" style="width: 13%;">New Tracking</th>
+                                    <th class="px-6 py-3.5 text-right" style="width: 2%;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="orders-tbody" class="divide-y divide-stone-100 text-sm">
-                                <!-- Data will be populated here by JS -->
+                                <!-- Pre-populated database records are rendered dynamically here -->
                             </tbody>
                         </table>
                     </div>
@@ -269,8 +335,8 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-stone-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0V9a2 2 0 00-2-2H6a2 2 0 00-2 2v2m0 4h18" />
                         </svg>
-                        <p class="text-stone-500 font-medium text-sm">Tiada rekod ditemui</p>
-                        <p class="text-stone-400 text-xs mt-1">Masukkan rekod baharu di borang sebelah kiri.</p>
+                        <p class="text-stone-500 font-medium text-sm">No records found</p>
+                        <p class="text-stone-400 text-xs mt-1">Please enter a new record in the registration form.</p>
                     </div>
                 </div>
 
@@ -281,51 +347,273 @@
     <!-- CUSTOM CONFIRM MODAL -->
     <div id="confirm-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl transform scale-95 transition-transform duration-200">
-            <h3 class="text-lg font-bold text-stone-800 mb-2">Konfirmasi Tindakan</h3>
-            <p id="confirm-message" class="text-stone-600 text-sm mb-6">Adakah anda pasti mahu melakukan tindakan ini?</p>
+            <h3 class="text-lg font-bold text-stone-800 mb-2">Confirm Action</h3>
+            <p id="confirm-message" class="text-stone-600 text-sm mb-6">Are you sure you want to delete this record?</p>
             <div class="flex justify-end space-x-3 text-sm font-semibold">
-                <button id="confirm-cancel-btn" class="px-4 py-2 text-stone-500 hover:text-stone-700 hover:bg-stone-50 rounded-xl transition-all">Batal</button>
-                <button id="confirm-ok-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all">Ya, Padam</button>
+                <button id="confirm-cancel-btn" class="px-4 py-2 text-stone-500 hover:text-stone-700 hover:bg-stone-50 rounded-xl transition-all">Cancel</button>
+                <button id="confirm-ok-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all">Yes, Delete</button>
             </div>
         </div>
     </div>
 
     <!-- FOOTER -->
     <footer class="bg-white border-t border-stone-200 py-6 mt-12 text-center text-xs text-stone-400">
-        <p>© 2026 NOSTALGYA™. Hak Cipta Terpelihara. Sistem dibangunkan untuk pengurusan dalaman sahaja.</p>
+        <p>© 2026 NOSTALGYA™. All Rights Reserved. Internal Operations Management Tool.</p>
     </footer>
 
     <!-- TOAST POPUP NOTIFICATION -->
     <div id="toast" class="fixed bottom-5 right-5 bg-stone-900 text-white px-5 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-2 z-50 text-sm">
         <span id="toast-icon">✅</span>
-        <span id="toast-message">Mesej berjaya dimasukkan!</span>
+        <span id="toast-message">Record saved successfully!</span>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // Default Mock Data - Kosong secara lalai
-        const initialMockData = [];
+    <!-- FIREBASE AND SYSTEM LOGIC (Using Modular ES Script) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+        // Pre-populated active database matching user's image_51d4ec.png
+        const initialMockData = [
+            {
+                id: '1779689338624',
+                name: 'Muhamma Amirul Azuar',
+                orderNum: '#NO1059',
+                productOriginal: 'studio trousers',
+                sizeOriginal: 'XL',
+                productNew: 'studio trousers',
+                sizeNew: 'XXL',
+                trackingNum: '7227052991944216',
+                newTrackingNum: '',
+                notes: 'TUNGGU CUSTOMER RETURN',
+                status: 'done',
+                date: '2026-05-25',
+                createdAt: 1779689338624
+            },
+            {
+                id: '1779688817634',
+                name: 'Hj Rizal Ibrahim',
+                orderNum: '#NO1056',
+                productOriginal: 'studio trousers',
+                sizeOriginal: 'XXL',
+                productNew: 'studio trousers',
+                sizeNew: 'L',
+                trackingNum: '7227052991947916',
+                newTrackingNum: '',
+                notes: 'TUNGGU CUSTOMER RETURN',
+                status: 'processing',
+                date: '2026-05-25',
+                createdAt: 1779688817634
+            },
+            {
+                id: '1779688491670',
+                name: 'Jay Seaw',
+                orderNum: '#NO1050',
+                productOriginal: 'Overlay Tee',
+                sizeOriginal: 'L',
+                productNew: 'Overlay Tee',
+                sizeNew: 'M',
+                trackingNum: '7228052991953116',
+                newTrackingNum: '',
+                notes: 'TUNGGU CUSTOMER RETURN',
+                status: 'processing',
+                date: '2026-05-25',
+                createdAt: 1779688491670
+            },
+            {
+                id: '1779685523376',
+                name: 'Muhammad Naeem Zaidi',
+                orderNum: '#NO1067',
+                productOriginal: 'Black Jacket',
+                sizeOriginal: '2XL',
+                productNew: 'Black Jacket',
+                sizeNew: 'XL',
+                trackingNum: '7228051638430626',
+                newTrackingNum: '',
+                notes: 'TUNGGU CUSTOMER RETURN',
+                status: 'processing',
+                date: '2026-05-25',
+                createdAt: 1779685523376
+            },
+            {
+                id: '1779685214528',
+                name: 'AHMAD AZRAF AZMAN',
+                orderNum: '#NO1036',
+                productOriginal: 'Vintage Tee',
+                sizeOriginal: 'XL',
+                productNew: 'Slim Fit Tee',
+                sizeNew: 'XL',
+                trackingNum: '7227058243241456',
+                newTrackingNum: '',
+                notes: 'CUSTOMER HANTAR BY LALMOVE DAMANSARA',
+                status: 'done',
+                date: '2026-05-25',
+                createdAt: 1779685214528
+            }
+        ];
 
         let exchanges = [];
         let currentFilter = 'all';
         let pendingDeleteId = null;
         let isDeleteAll = false;
+        
+        // Cloud integration states
+        let db = null;
+        let auth = null;
+        let usingCloud = false;
+        let unsubscribeExchanges = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'nostalgya-tracking';
 
         // On window load
         window.onload = function() {
-            const savedData = localStorage.getItem('nostalgya_exchanges_v4');
-            if (savedData) {
-                exchanges = JSON.parse(savedData);
+            setupSystem();
+            
+            // Check previous sidebar layout preference (Rule local persistent)
+            const sidebarPref = localStorage.getItem('nostalgya_sidebar_state');
+            if (sidebarPref === 'collapsed') {
+                toggleSidebar(false);
             } else {
-                exchanges = initialMockData;
-                saveToLocalStorage();
+                toggleSidebar(true);
             }
-            renderData();
 
             // Set up Modal listeners
             document.getElementById('confirm-cancel-btn').addEventListener('click', hideConfirmModal);
             document.getElementById('confirm-ok-btn').addEventListener('click', executeConfirmedAction);
         };
+
+        // Firebase Setup & Initialization Flow
+        async function setupSystem() {
+            let firebaseConfig = null;
+
+            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                try {
+                    firebaseConfig = JSON.parse(__firebase_config);
+                } catch (e) {
+                    console.error("Platform config error:", e);
+                }
+            } 
+            
+            if (!firebaseConfig) {
+                const customSaved = localStorage.getItem('nostalgya_custom_firebase_config');
+                if (customSaved) {
+                    try {
+                        firebaseConfig = JSON.parse(customSaved);
+                        document.getElementById('firebase-config-input').value = customSaved;
+                    } catch (e) {
+                        console.error("Saved custom config error:", e);
+                    }
+                }
+            }
+
+            if (firebaseConfig) {
+                updateConnectionStatus('connecting', 'Connecting to Cloud...');
+                try {
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        if (user) {
+                            usingCloud = true;
+                            updateConnectionStatus('cloud', '🟢 Cloud Mode (Live Shared Sync)');
+                            listenToCloudExchanges();
+                        } else {
+                            fallbackToLocalStorage();
+                        }
+                    });
+
+                } catch (err) {
+                    console.error("Firebase connection failed. Falling back to LocalStorage.", err);
+                    fallbackToLocalStorage('🔴 Connection Failed (Local Mode)');
+                }
+            } else {
+                fallbackToLocalStorage('🟡 Local Mode (Click ⚙️ to Connect Cloud)');
+            }
+        }
+
+        function fallbackToLocalStorage(statusText = '🟡 Local Mode') {
+            usingCloud = false;
+            updateConnectionStatus('local', statusText);
+            
+            const savedData = localStorage.getItem('nostalgya_exchanges_v4');
+            if (savedData) {
+                exchanges = JSON.parse(savedData);
+            } else {
+                // Pre-populate with our initial default records instead of starting totally blank
+                exchanges = initialMockData;
+                saveToLocalStorage();
+            }
+            renderData();
+        }
+
+        function updateConnectionStatus(type, text) {
+            const badge = document.getElementById('connection-badge');
+            const dot = document.getElementById('connection-dot');
+            const label = document.getElementById('connection-text');
+
+            label.innerText = text;
+
+            badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ";
+            dot.className = "w-2 h-2 mr-2 rounded-full ";
+
+            if (type === 'connecting') {
+                badge.classList.add('bg-stone-100', 'text-stone-700', 'border-stone-200');
+                dot.classList.add('bg-stone-500', 'animate-pulse');
+            } else if (type === 'cloud') {
+                badge.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-100');
+                dot.classList.add('bg-emerald-500');
+            } else {
+                badge.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-100');
+                dot.classList.add('bg-amber-500');
+            }
+        }
+
+        // Firestore real-time listener (Rules 1 & 2)
+        function listenToCloudExchanges() {
+            if (unsubscribeExchanges) unsubscribeExchanges();
+
+            const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'exchanges');
+
+            unsubscribeExchanges = onSnapshot(collectionRef, (snapshot) => {
+                const list = [];
+                snapshot.forEach((doc) => {
+                    list.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                list.sort((a, b) => {
+                    const timeA = a.createdAt || 0;
+                    const timeB = b.createdAt || 0;
+                    return timeB - timeA;
+                });
+
+                // If cloud is empty initially, seed it with initial default records so user has data ready
+                if (list.length === 0 && exchanges.length === 0) {
+                    initialMockData.forEach(async (mockItem) => {
+                        try {
+                            await addDoc(collectionRef, mockItem);
+                        } catch (e) {
+                            console.error("Error seeding initial data: ", e);
+                        }
+                    });
+                } else {
+                    exchanges = list;
+                    renderData();
+                }
+            }, (error) => {
+                console.error("Firestore loading error: ", error);
+                showToast("Failed to load cloud data. Reverting to Local Storage.", "⚠️");
+                fallbackToLocalStorage('🔴 Cloud Error (Local Mode)');
+            });
+        }
 
         function saveToLocalStorage() {
             localStorage.setItem('nostalgya_exchanges_v4', JSON.stringify(exchanges));
@@ -363,7 +651,6 @@
                 selectNew.removeAttribute('required');
                 selectNew.value = '';
                 
-                // Reset custom product state if hidden
                 document.getElementById('custom-new-container').classList.add('hidden');
                 customInput.removeAttribute('required');
                 customInput.value = '';
@@ -371,7 +658,7 @@
         }
 
         // Form Submit Handler
-        function handleFormSubmit(event) {
+        async function handleFormSubmit(event) {
             event.preventDefault();
             
             const name = document.getElementById('cust-name').value.trim();
@@ -383,7 +670,7 @@
             let productOriginal = origSelect;
             if (origSelect === 'custom') {
                 productOriginal = document.getElementById('product-original-custom').value.trim();
-                if (!productOriginal) productOriginal = "Produk Kustom";
+                if (!productOriginal) productOriginal = "Custom Product";
             }
 
             // Get replacement product
@@ -394,7 +681,7 @@
                 const newSelect = document.getElementById('product-new-select').value;
                 if (newSelect === 'custom') {
                     productNew = document.getElementById('product-new-custom').value.trim();
-                    if (!productNew) productNew = "Produk Kustom";
+                    if (!productNew) productNew = "Custom Product";
                 } else if (newSelect) {
                     productNew = newSelect;
                 }
@@ -403,10 +690,10 @@
             const sizeOriginal = document.getElementById('size-original').value.trim().toUpperCase();
             const sizeNew = document.getElementById('size-new').value.trim().toUpperCase();
             const trackingNum = document.getElementById('tracking-num').value.trim();
+            const newTrackingNum = document.getElementById('new-tracking-num').value.trim();
             const status = document.getElementById('status-select').value;
             
             const newExchange = {
-                id: Date.now().toString(),
                 name,
                 orderNum,
                 productOriginal,
@@ -414,14 +701,29 @@
                 productNew,
                 sizeNew,
                 trackingNum,
+                newTrackingNum,
                 notes,
                 status,
-                date: new Date().toISOString().split('T')[0]
+                date: new Date().toISOString().split('T')[0],
+                createdAt: Date.now()
             };
 
-            exchanges.unshift(newExchange);
-            saveToLocalStorage();
-            renderData();
+            if (usingCloud) {
+                try {
+                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'exchanges');
+                    await addDoc(collectionRef, newExchange);
+                    showToast('✅ Record successfully saved to Cloud!');
+                } catch (error) {
+                    console.error("Cloud save error:", error);
+                    showToast('🔴 Failed to save to Cloud.', '❌');
+                }
+            } else {
+                newExchange.id = Date.now().toString();
+                exchanges.unshift(newExchange);
+                saveToLocalStorage();
+                renderData();
+                showToast('✅ Record saved locally!');
+            }
             
             // Reset Form and elements
             document.getElementById('exchange-form').reset();
@@ -431,8 +733,6 @@
             document.getElementById('product-original-custom').removeAttribute('required');
             document.getElementById('product-new-select').removeAttribute('required');
             document.getElementById('product-new-custom').removeAttribute('required');
-            
-            showToast('✅ Rekod pertukaran berjaya disimpan!');
         }
 
         // Toast alert
@@ -475,46 +775,85 @@
             }, 200);
         }
 
-        function executeConfirmedAction() {
+        async function executeConfirmedAction() {
             if (isDeleteAll) {
-                exchanges = [];
-                saveToLocalStorage();
-                renderData();
-                showToast('Semua data berjaya dipadam.', '🧹');
+                if (usingCloud) {
+                    try {
+                        for (let item of exchanges) {
+                            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', item.id));
+                        }
+                        showToast('All Cloud data deleted.', '🧹');
+                    } catch (e) {
+                        showToast('Error deleting Cloud data', '❌');
+                    }
+                } else {
+                    exchanges = [];
+                    saveToLocalStorage();
+                    renderData();
+                    showToast('All Local data cleared.', '🧹');
+                }
             } else if (pendingDeleteId) {
-                exchanges = exchanges.filter(item => item.id !== pendingDeleteId);
-                saveToLocalStorage();
-                renderData();
-                showToast('Rekod berjaya dipadam.', '🗑️');
+                if (usingCloud) {
+                    try {
+                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', pendingDeleteId));
+                        showToast('Cloud record deleted.', '🗑️');
+                    } catch (e) {
+                        showToast('Error deleting record', '❌');
+                    }
+                } else {
+                    exchanges = exchanges.filter(item => item.id !== pendingDeleteId);
+                    saveToLocalStorage();
+                    renderData();
+                    showToast('Record deleted.', '🗑️');
+                }
             }
             hideConfirmModal();
         }
 
         // Live update notes from table
-        // Live update notes from table
-        function updateNotes(id, value) {
-            exchanges = exchanges.map(item => {
-                if (item.id === id) {
-                    return { ...item, notes: value.trim() };
+        async function updateNotes(id, value) {
+            if (usingCloud) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
+                    await updateDoc(docRef, { notes: value.trim() });
+                    showToast('Notes updated!', '📝');
+                } catch (e) {
+                    showToast('Error updating notes', '❌');
                 }
-                return item;
-            });
-            saveToLocalStorage();
-            renderData();
-            showToast('Nota operasi dikemaskini!', '📝');
+            } else {
+                exchanges = exchanges.map(item => {
+                    if (item.id === id) {
+                        return { ...item, notes: value.trim() };
+                    }
+                    return item;
+                });
+                saveToLocalStorage();
+                renderData();
+                showToast('Notes updated!', '📝');
+            }
         }
 
         // Live update order number from table
-        function updateOrderNum(id, value) {
-            exchanges = exchanges.map(item => {
-                if (item.id === id) {
-                    return { ...item, orderNum: value.trim() };
+        async function updateOrderNum(id, value) {
+            if (usingCloud) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
+                    await updateDoc(docRef, { orderNum: value.trim() });
+                    showToast('Order ID updated!', '🆔');
+                } catch (e) {
+                    showToast('Error updating Order ID', '❌');
                 }
-                return item;
-            });
-            saveToLocalStorage();
-            renderData();
-            showToast('Nombor pesanan dikemaskini!', '🆔');
+            } else {
+                exchanges = exchanges.map(item => {
+                    if (item.id === id) {
+                        return { ...item, orderNum: value.trim() };
+                    }
+                    return item;
+                });
+                saveToLocalStorage();
+                renderData();
+                showToast('Order ID updated!', '🆔');
+            }
         }
 
         // Table Render Logic
@@ -535,7 +874,8 @@
                     (item.productOriginal && item.productOriginal.toLowerCase().includes(searchVal)) ||
                     (item.productNew && item.productNew.toLowerCase().includes(searchVal)) ||
                     (item.notes && item.notes.toLowerCase().includes(searchVal)) ||
-                    item.trackingNum.toLowerCase().includes(searchVal)
+                    (item.trackingNum && item.trackingNum.toLowerCase().includes(searchVal)) ||
+                    (item.newTrackingNum && item.newTrackingNum.toLowerCase().includes(searchVal))
                 );
             }
 
@@ -562,14 +902,13 @@
                         <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500 animate-pulse"></span>Processing
                        </span>`;
 
-                const origProd = item.productOriginal || item.product || 'Produk';
+                const origProd = item.productOriginal || item.product || 'Product';
                 const origSize = item.sizeOriginal || 'N/A';
-                const newProd = item.productNew || origProd; // Fallback to same product
+                const newProd = item.productNew || origProd;
                 const newSize = item.sizeNew || 'N/A';
 
                 const isSameProduct = origProd === newProd;
 
-                // Render dynamic layout based on whether they changed products, or just sizes
                 let detailColumnMarkup = "";
                 if (isSameProduct) {
                     detailColumnMarkup = `
@@ -588,17 +927,13 @@
                     detailColumnMarkup = `
                         <div class="flex flex-col space-y-1">
                             <div class="flex items-center mb-0.5">
-                                <span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100 uppercase tracking-wider">Tukar Produk</span>
+                                <span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100 uppercase tracking-wider">Product Swap</span>
                             </div>
                             <div class="flex flex-col space-y-1">
-                                <!-- Original Product & Size -->
                                 <span class="text-xs text-stone-500 font-medium bg-stone-100 px-2 py-0.5 rounded border border-stone-200 inline-block truncate max-w-[200px]" title="${escapeHtml(origProd)} (${escapeHtml(origSize)})">
                                     ${escapeHtml(origProd)} <strong>(${escapeHtml(origSize)})</strong>
                                 </span>
-                                
                                 <span class="text-stone-400 font-bold text-[10px] pl-2">➔</span>
-                                
-                                <!-- New Product & Size -->
                                 <span class="text-xs text-white font-medium bg-stone-800 px-2 py-0.5 rounded shadow-sm inline-block truncate max-w-[200px]" title="${escapeHtml(newProd)} (${escapeHtml(newSize)})">
                                     ${escapeHtml(newProd)} <strong>(${escapeHtml(newSize)})</strong>
                                 </span>
@@ -607,35 +942,38 @@
                     `;
                 }
 
+                // Render dynamically compiled structure
                 tr.innerHTML = `
                     <td class="px-6 py-4 align-top">
                         <div class="font-bold text-stone-800">${escapeHtml(item.name)}</div>
-                        <span class="text-[9px] text-stone-400 mt-1.5 block font-medium">Didaftar: ${item.date}</span>
+                        <span class="text-[9px] text-stone-400 mt-1.5 block font-medium">Registered: ${item.date}</span>
                     </td>
                     <td class="px-4 py-4 align-top">
                         <input type="text" value="${escapeHtml(item.orderNum)}" 
-                            onchange="updateOrderNum('${item.id}', this.value)"
-                            class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 font-bold w-full transition-all">
+                            data-id="${item.id}"
+                            class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 font-bold w-full transition-all order-id-input">
                     </td>
                     <td class="px-4 py-4 align-top">
                         <textarea 
-                            onchange="updateNotes('${item.id}', this.value)"
-                            placeholder="Klik untuk tulis catatan..."
-                            class="w-full bg-amber-50/20 hover:bg-amber-50/50 focus:bg-white text-xs text-stone-700 p-2 rounded-xl border border-dashed border-stone-200 hover:border-amber-300/80 focus:border-amber-400 focus:outline-none transition-all resize-none font-medium placeholder-stone-400/80"
+                            data-id="${item.id}"
+                            placeholder="Click to add note..."
+                            class="w-full bg-amber-50/20 hover:bg-amber-50/50 focus:bg-white text-xs text-stone-700 p-2 rounded-xl border border-dashed border-stone-200 hover:border-amber-300/80 focus:border-amber-400 focus:outline-none transition-all resize-none font-medium placeholder-stone-400/80 notes-textarea"
                             rows="2"
                         >${escapeHtml(item.notes || '')}</textarea>
                     </td>
                     <td class="px-4 py-4 align-top">
                         ${detailColumnMarkup}
                     </td>
+                    <!-- Return Tracking (Customer -> Us) -->
                     <td class="px-4 py-4 align-top">
                         <div class="flex items-center space-x-1">
-                            <input type="text" value="${escapeHtml(item.trackingNum)}" 
-                                placeholder="Klik untuk tambah" 
-                                onchange="updateTracking('${item.id}', this.value)"
-                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono">
+                            <input type="text" value="${escapeHtml(item.trackingNum || '')}" 
+                                placeholder="Click to add" 
+                                data-id="${item.id}"
+                                data-type="return"
+                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono tracking-input-return">
                             ${item.trackingNum ? `
-                                <button onclick="copyToClipboard('${escapeHtml(item.trackingNum)}')" class="p-1 text-stone-400 hover:text-stone-700" title="Salin No Tracking">
+                                <button data-tracking="${escapeHtml(item.trackingNum)}" class="p-1 text-stone-400 hover:text-stone-700 copy-tracking-btn" title="Copy Return Tracking">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
                                     </svg>
@@ -643,19 +981,37 @@
                             ` : ''}
                         </div>
                     </td>
+                    <!-- Status Badge -->
                     <td class="px-4 py-4 text-center align-top">
-                        <div class="inline-block cursor-pointer" onclick="toggleStatus('${item.id}')" title="Klik untuk tukar status">
+                        <div class="inline-block cursor-pointer toggle-status-btn" data-id="${item.id}" title="Click to swap status">
                             ${statusBadge}
+                        </div>
+                    </td>
+                    <!-- New Tracking (Us -> Customer) -->
+                    <td class="px-4 py-4 align-top">
+                        <div class="flex items-center space-x-1">
+                            <input type="text" value="${escapeHtml(item.newTrackingNum || '')}" 
+                                placeholder="Click to add" 
+                                data-id="${item.id}"
+                                data-type="new"
+                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono tracking-input-new">
+                            ${item.newTrackingNum ? `
+                                <button data-tracking="${escapeHtml(item.newTrackingNum)}" class="p-1 text-stone-400 hover:text-stone-700 copy-tracking-btn" title="Copy Outgoing Tracking">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
+                                    </svg>
+                                </button>
+                            ` : ''}
                         </div>
                     </td>
                     <td class="px-6 py-4 text-right align-top">
                         <div class="flex items-center justify-end space-x-2">
-                            <button onclick="toggleStatus('${item.id}')" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition-colors" title="Ubah Status">
+                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition-colors toggle-status-btn-icon" title="Change Status">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
                                 </svg>
                             </button>
-                            <button onclick="deleteRecord('${item.id}')" class="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" title="Padam Rekod">
+                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors delete-record-btn" title="Delete Record">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
@@ -664,6 +1020,50 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
+            });
+
+            // Rebind DOM event listeners
+            document.querySelectorAll('.order-id-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    updateOrderNum(e.target.dataset.id, e.target.value);
+                });
+            });
+
+            document.querySelectorAll('.notes-textarea').forEach(textarea => {
+                textarea.addEventListener('change', (e) => {
+                    updateNotes(e.target.dataset.id, e.target.value);
+                });
+            });
+
+            document.querySelectorAll('.tracking-input-return').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    updateTracking(e.target.dataset.id, e.target.value, 'return');
+                });
+            });
+
+            document.querySelectorAll('.tracking-input-new').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    updateTracking(e.target.dataset.id, e.target.value, 'new');
+                });
+            });
+
+            document.querySelectorAll('.copy-tracking-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tracking = e.currentTarget.dataset.tracking;
+                    copyToClipboard(tracking);
+                });
+            });
+
+            document.querySelectorAll('.toggle-status-btn, .toggle-status-btn-icon').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    toggleStatus(e.currentTarget.dataset.id);
+                });
+            });
+
+            document.querySelectorAll('.delete-record-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    deleteRecord(e.currentTarget.dataset.id);
+                });
             });
         }
 
@@ -704,31 +1104,62 @@
         }
 
         // Fast status flip
-        function toggleStatus(id) {
-            exchanges = exchanges.map(item => {
-                if (item.id === id) {
-                    const nextStatus = item.status === 'done' ? 'processing' : 'done';
-                    const msg = nextStatus === 'done' ? 'Selesai diganti! ✅' : 'Ditukar ke Processing 🔄';
+        async function toggleStatus(id) {
+            const target = exchanges.find(item => item.id === id);
+            if (!target) return;
+
+            const nextStatus = target.status === 'done' ? 'processing' : 'done';
+            const msg = nextStatus === 'done' ? 'Successfully replaced! ✅' : 'Changed to Processing 🔄';
+
+            if (usingCloud) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
+                    await updateDoc(docRef, { status: nextStatus });
                     showToast(msg);
-                    return { ...item, status: nextStatus };
+                } catch (e) {
+                    showToast('Error updating status', '❌');
                 }
-                return item;
-            });
-            saveToLocalStorage();
-            renderData();
+            } else {
+                exchanges = exchanges.map(item => {
+                    if (item.id === id) {
+                        return { ...item, status: nextStatus };
+                    }
+                    return item;
+                });
+                saveToLocalStorage();
+                renderData();
+                showToast(msg);
+            }
         }
 
-        // Fast Tracking Update
-        function updateTracking(id, value) {
-            exchanges = exchanges.map(item => {
-                if (item.id === id) {
-                    return { ...item, trackingNum: value.trim() };
+        // Fast Tracking Update for both Return and New Postage Out Tracking
+        async function updateTracking(id, value, type) {
+            const updateField = type === 'return' ? 'trackingNum' : 'newTrackingNum';
+            const msg = type === 'return' ? 'Return tracking updated!' : 'New outgoing tracking updated!';
+
+            if (usingCloud) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
+                    const updateObj = {};
+                    updateObj[updateField] = value.trim();
+                    await updateDoc(docRef, updateObj);
+                    showToast(msg, '📦');
+                } catch (e) {
+                    showToast('Error updating tracking number', '❌');
                 }
-                return item;
-            });
-            saveToLocalStorage();
-            renderData();
-            showToast('No. Tracking berjaya dikemaskini!', '📦');
+            } else {
+                exchanges = exchanges.map(item => {
+                    if (item.id === id) {
+                        const updatedItem = { ...item };
+                        updatedItem[updateField] = value.trim();
+                        return updatedItem;
+                    }
+                    return item;
+                });
+                saveToLocalStorage();
+                renderData();
+                showToast(msg, '📦');
+            }
         }
 
         // Copy tracking
@@ -739,19 +1170,79 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            showToast('No. Tracking disalin ke clipboard!', '📋');
+            showToast('Tracking number copied to clipboard!', '📋');
         }
 
         // Delete handlers
         function deleteRecord(id) {
             const target = exchanges.find(item => item.id === id);
             if (!target) return;
-            showConfirmModal(`Adakah anda pasti mahu memadam rekod pertukaran untuk "${target.name}"?`, false, id);
+            showConfirmModal(`Are you sure you want to delete the record for "${target.name}"?`, false, id);
         }
 
-        // Clear all data
         function clearAllData() {
-            showConfirmModal('ADAKAH ANDA PASTI? Tindakan ini akan memadam semua rekod data pertukaran dari penyimpanan pelayar anda secara kekal!', true);
+            showConfirmModal('WARNING: This will permanently delete all records from storage!', true);
+        }
+
+        // Slide / Toggle Sidebar Logic
+        function toggleSidebar(show) {
+            const sidebar = document.getElementById('sidebar-panel');
+            const openBtn = document.getElementById('sidebar-toggle-open');
+            
+            if (show) {
+                sidebar.classList.remove('hidden', 'xl:w-0', 'opacity-0');
+                sidebar.classList.add('w-full', 'xl:w-96', 'opacity-100');
+                openBtn.classList.add('hidden');
+                localStorage.setItem('nostalgya_sidebar_state', 'expanded');
+            } else {
+                sidebar.classList.add('hidden', 'xl:w-0', 'opacity-0');
+                sidebar.classList.remove('w-full', 'xl:w-96', 'opacity-100');
+                openBtn.classList.remove('hidden');
+                localStorage.setItem('nostalgya_sidebar_state', 'collapsed');
+            }
+        }
+
+        // Custom Firebase Config Panel Actions
+        function toggleFirebaseSettings() {
+            const panel = document.getElementById('firebase-settings-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function saveFirebaseConfig() {
+            const configText = document.getElementById('firebase-config-input').value.trim();
+            if (!configText) {
+                showToast('Please enter a valid Firebase JSON configuration.', '❌');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(configText);
+                if (!parsed.apiKey || !parsed.projectId) {
+                    showToast('Incomplete config! Ensure it has apiKey & projectId.', '⚠️');
+                    return;
+                }
+
+                localStorage.setItem('nostalgya_custom_firebase_config', configText);
+                showToast('Configuration saved! Reconnecting...', '🔄');
+                toggleFirebaseSettings();
+                setupSystem();
+            } catch (err) {
+                showToast('Invalid JSON format! Paste the raw config block.', '❌');
+            }
+        }
+
+        function resetToLocal() {
+            localStorage.removeItem('nostalgya_custom_firebase_config');
+            document.getElementById('firebase-config-input').value = '';
+            showToast('Reverted to Local Storage.', '🧹');
+            toggleFirebaseSettings();
+            
+            if (unsubscribeExchanges) {
+                unsubscribeExchanges();
+                unsubscribeExchanges = null;
+            }
+            
+            fallbackToLocalStorage();
         }
 
         // XSS Prevention
@@ -764,6 +1255,25 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        // Expose functions globally to be used by elements outside modular scope
+        window.handleProductChange = handleProductChange;
+        window.toggleProductChangeSection = toggleProductChangeSection;
+        window.handleFormSubmit = handleFormSubmit;
+        window.setStatusFilter = setStatusFilter;
+        window.filterData = filterData;
+        window.toggleStatus = toggleStatus;
+        window.updateTracking = updateTracking;
+        window.copyToClipboard = copyToClipboard;
+        window.deleteRecord = deleteRecord;
+        window.clearAllData = clearAllData;
+        window.updateNotes = updateNotes;
+        window.updateOrderNum = updateOrderNum;
+        window.toggleFirebaseSettings = toggleFirebaseSettings;
+        window.saveFirebaseConfig = saveFirebaseConfig;
+        window.resetToLocal = resetToLocal;
+        window.toggleSidebar = toggleSidebar;
+
     </script>
 </body>
 </html>
