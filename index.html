@@ -483,7 +483,14 @@
 
         // Firebase Setup & Initialization Flow
         async function setupSystem() {
-            let firebaseConfig = null;
+            let firebaseConfig = {
+    apiKey: "AIzaSyDtR9_Tj3XasUPvPkqIvZWdXwqn254Dyzc",
+    authDomain: "nostalgya-tracking.firebaseapp.com",
+    projectId: "nostalgya-tracking",
+    storageBucket: "nostalgya-tracking.firebasestorage.app",
+    messagingSenderId: "926756039356",
+    appId: "1:926756039356:web:84639463018dff0cedbeb9"
+};
 
             if (typeof __firebase_config !== 'undefined' && __firebase_config) {
                 try {
