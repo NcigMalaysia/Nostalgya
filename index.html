@@ -3,75 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Size Exchange Tracking System - NOSTALGYA</title>
+    <title>Sistem Tracking Pertukaran Saiz - NOSTALGYA</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts for premium display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <!-- Chart.js CDN for Executive Dashboard -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #fbfaf8;
+            background-color: #fcfbfa;
         }
         .serif-title {
             font-family: 'Playfair Display', serif;
         }
-        /* Custom premium glassmorphism shadows & scrollbars */
+        /* Custom scrollbar for table area */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #f5f4f0;
+            background: #f1f1f1;
         }
         ::-webkit-scrollbar-thumb {
-            background: #d6d3d1;
-            border-radius: 4px;
+            background: #cbd5e1;
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #a8a29e;
-        }
-        .gradient-card-dark {
-            background: linear-gradient(135deg, #1c1917 0%, #2e2a27 100%);
+            background: #94a3b8;
         }
     </style>
 </head>
-<body class="text-stone-800 min-h-screen flex flex-col antialiased">
+<body class="text-slate-800 min-h-screen flex flex-col">
 
     <!-- HEADER BRANDING AREA -->
     <header class="bg-white border-b border-stone-200 shadow-sm sticky top-0 z-30">
-        <div class="max-w-[98rem] mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="max-w-[98rem] mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2">
             <div class="flex-1 hidden sm:block"></div>
             <!-- Logo Container -->
             <div class="flex-1 flex flex-col items-center justify-center">
                 <div class="w-full max-w-xs overflow-hidden rounded-md flex justify-center mb-1">
                     <img src="image_ac748b.png" alt="Header NOSTALGYA" class="max-h-12 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/600x100/ffffff/000000?text=NOSTALGYA';">
                 </div>
-                <p class="text-[10px] tracking-[0.2em] text-stone-500 uppercase font-bold">Size Exchange Management &amp; Analytics Hub</p>
+                <p class="text-[10px] tracking-widest text-stone-500 uppercase font-semibold">Size Exchange Management &amp; Tracking System</p>
             </div>
             
             <!-- Connection Status Indicator -->
             <div class="flex-1 flex justify-end">
-                <div id="connection-badge" class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-100">
-                    <span class="w-2.5 h-2.5 mr-2 rounded-full bg-amber-500 animate-pulse" id="connection-dot"></span>
+                <div id="connection-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-100">
+                    <span class="w-2 h-2 mr-2 rounded-full bg-emerald-500 animate-pulse" id="connection-dot"></span>
                     <span id="connection-text">Detecting Connection...</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-[98rem] w-full mx-auto px-6 py-8">
+    <main class="flex-grow max-w-[98rem] w-full mx-auto px-4 py-6">
         
         <!-- DASHBOARD STATS -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-stone-500">Total Swap Requests</p>
+                    <p class="text-sm font-medium text-stone-500">Total Applications</p>
                     <h3 class="text-3xl font-bold mt-1 text-stone-800" id="stat-total">0</h3>
                 </div>
                 <div class="p-3 bg-stone-100 rounded-xl text-stone-700">
@@ -83,7 +80,7 @@
             
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-amber-600">Pending Operations (Processing)</p>
+                    <p class="text-sm font-medium text-amber-600">Processing</p>
                     <h3 class="text-3xl font-bold mt-1 text-amber-700" id="stat-processing">0</h3>
                 </div>
                 <div class="p-3 bg-amber-50 rounded-xl text-amber-600">
@@ -95,7 +92,7 @@
             
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-emerald-600">Fulfillment Complete (Done Replace)</p>
+                    <p class="text-sm font-medium text-emerald-600">Done Replace</p>
                     <h3 class="text-3xl font-bold mt-1 text-emerald-700" id="stat-done">0</h3>
                 </div>
                 <div class="p-3 bg-emerald-50 rounded-xl text-emerald-600">
@@ -107,22 +104,17 @@
         </section>
 
         <!-- NAVIGATION TABS -->
-        <div class="flex items-center justify-between border-b border-stone-200 mb-8 pb-px">
-            <div class="flex space-x-2">
-                <button onclick="switchTab('records')" id="tab-records-btn" class="px-6 py-3 text-sm font-bold border-b-2 border-stone-900 text-stone-900 transition-all flex items-center space-x-2">
-                    <span>📋 Operations Desk</span>
-                </button>
-                <button onclick="switchTab('reports')" id="tab-reports-btn" class="px-6 py-3 text-sm font-semibold border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition-all flex items-center space-x-2">
-                    <span>📊 Executive Analytics</span>
-                    <span class="bg-amber-500 text-stone-950 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider font-extrabold shadow-sm animate-pulse">Advanced AI</span>
-                </button>
-            </div>
-            <div class="text-xs text-stone-400 font-medium hidden md:block">
-                Systems fully active &middot; Updates instantly
-            </div>
+        <div class="flex items-center space-x-2 border-b border-stone-200 mb-6">
+            <button onclick="switchTab('records')" id="tab-records-btn" class="px-5 py-3 text-sm font-bold border-b-2 border-stone-900 text-stone-900 transition-all flex items-center space-x-2">
+                <span>📋 Manage Records</span>
+            </button>
+            <button onclick="switchTab('reports')" id="tab-reports-btn" class="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition-all flex items-center space-x-2">
+                <span>📊 Manager Dashboard</span>
+                <span class="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-full uppercase tracking-wider font-bold animate-pulse">Advanced</span>
+            </button>
         </div>
 
-        <!-- TAB 1: OPERATIONS DESK (RECORDS & SIDEBAR) -->
+        <!-- MAIN LAYOUT: TAB 1 (RECORDS & SIDEBAR) -->
         <div id="tab-records-content" class="flex flex-col xl:flex-row gap-6 items-start relative">
             
             <!-- FORM COLUMN (COLLAPSIBLE SIDEBAR) -->
@@ -130,7 +122,7 @@
                 <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm relative">
                     
                     <!-- Hide Sidebar Arrow Button -->
-                    <button onclick="toggleSidebar(false)" class="absolute right-4 top-4 p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Collapse Registration Form">
+                    <button onclick="toggleSidebar(false)" class="absolute right-4 top-4 p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Collapse Form">
                         <div class="flex items-center space-x-1">
                             <span class="text-[10px] font-bold uppercase tracking-wider">◀ Collapse</span>
                         </div>
@@ -141,11 +133,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                             </svg>
-                            <h2 class="text-lg font-bold text-stone-800">Add Swap Request</h2>
+                            <h2 class="text-lg font-bold text-stone-800">Add Record</h2>
                         </div>
                         
                         <!-- Settings Icon for Firebase Setup -->
-                        <button onclick="toggleFirebaseSettings()" class="p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Configure Cloud Sync">
+                        <button onclick="toggleFirebaseSettings()" class="p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Configure Cloud Database">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -154,27 +146,16 @@
                     </div>
 
                     <!-- CLOUD CONFIG PANEL (Hidden by Default) -->
-                    <div id="firebase-settings-panel" class="hidden mb-6 p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs space-y-3 animate-fadeIn">
+                    <div id="firebase-settings-panel" class="hidden mb-6 p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-stone-700">Cloud Integration & AI Keys</span>
+                            <span class="font-bold text-stone-700">Firebase Cloud Settings</span>
                             <button type="button" onclick="toggleFirebaseSettings()" class="text-stone-400 hover:text-stone-600">Close</button>
                         </div>
-                        <p class="text-stone-500 leading-relaxed">Configure your keys below to establish safe, automated live synchronization.</p>
-                        
-                        <div>
-                            <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Firebase Configuration JSON</label>
-                            <textarea id="firebase-config-input" rows="3" placeholder='{"apiKey": "...", "projectId": "...", ...}' class="w-full p-2 border border-stone-200 rounded-lg focus:outline-none font-mono text-[10px] bg-white"></textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Gemini API Key (Optional)</label>
-                            <input type="password" id="gemini-key-input" placeholder="Paste your Gemini API key here" class="w-full p-2 border border-stone-200 rounded-lg focus:outline-none text-xs bg-white">
-                            <p class="text-[9px] text-stone-400 mt-1">If left blank, standard built-in models will be queried.</p>
-                        </div>
-
-                        <div class="flex space-x-2 pt-1">
+                        <p class="text-stone-500 leading-relaxed">Paste your <strong>Firebase Config</strong> object below to enable live shared database synchronization with your operations team.</p>
+                        <textarea id="firebase-config-input" rows="4" placeholder='{"apiKey": "...", "projectId": "...", ...}' class="w-full p-2 border border-stone-200 rounded-lg focus:outline-none font-mono text-[10px]"></textarea>
+                        <div class="flex space-x-2">
                             <button type="button" onclick="saveFirebaseConfig()" class="flex-1 bg-stone-900 text-white font-medium py-1.5 rounded-lg hover:bg-stone-800 transition-colors">Connect</button>
-                            <button type="button" onclick="resetToLocal()" class="flex-1 bg-stone-200 text-stone-700 font-medium py-1.5 rounded-lg hover:bg-stone-300 transition-colors">Use Local Only</button>
+                            <button type="button" onclick="resetToLocal()" class="flex-1 bg-stone-200 text-stone-700 font-medium py-1.5 rounded-lg hover:bg-stone-300 transition-colors">Use Local</button>
                         </div>
                     </div>
                     
@@ -193,7 +174,7 @@
 
                         <!-- ORIGINAL ITEM INFO -->
                         <div class="border-t border-stone-100 pt-4">
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-original-select">Original Product <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-original-select">Original Returned Item <span class="text-red-500">*</span></label>
                             <select id="product-original-select" required onchange="handleProductChange('original', this.value)" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
                                 <option value="" disabled selected>Select Product...</option>
                                 <option value="Wide Cut Trousers">Wide Cut Trousers</option>
@@ -207,22 +188,22 @@
                                 <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
                                 <option value="Card Holder">Card Holder</option>
                                 <option value="Journal">Journal</option>
-                                <option value="custom">Other / Custom Product...</option>
+                                <option value="custom">Other / Custom...</option>
                             </select>
                             
                             <div id="custom-original-container" class="hidden mt-2">
-                                <input type="text" id="product-original-custom" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none text-sm" placeholder="Type custom product name...">
+                                <input type="text" id="product-original-custom" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none text-sm" placeholder="Type custom product name">
                             </div>
                         </div>
 
                         <!-- SIZES GRID -->
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-2 gap-3" id="standard-sizing-row">
                             <div>
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-original">Purchased Size <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-original">Original Size <span class="text-red-500">*</span></label>
                                 <input type="text" id="size-original" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="e.g. XL">
                             </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-new">Requested Size <span class="text-red-500">*</span></label>
+                            <div id="standard-exchange-size-wrapper">
+                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-new">Exchange Size <span class="text-red-500">*</span></label>
                                 <input type="text" id="size-new" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="e.g. XXL">
                             </div>
                         </div>
@@ -231,66 +212,56 @@
                         <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-150 mt-2">
                             <label class="flex items-center space-x-2.5 cursor-pointer">
                                 <input type="checkbox" id="toggle-product-change" onchange="toggleProductChangeSection(this.checked)" class="w-4 h-4 rounded text-stone-900 border-stone-300 focus:ring-stone-500 cursor-pointer">
-                                <span class="text-xs font-bold text-stone-700 tracking-wide select-none">Swap for a different item?</span>
+                                <span class="text-xs font-bold text-stone-700 tracking-wide select-none">Swap for different item / multiple items?</span>
                             </label>
                             
-                            <!-- ALTERNATIVE NEW PRODUCT SECTION -->
+                            <!-- ALTERNATIVE MULTIPLE NEW PRODUCTS SECTION -->
                             <div id="product-change-section" class="hidden mt-3 pt-3 border-t border-stone-200/60">
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-new-select">New Product Swap <span class="text-red-500">*</span></label>
-                                <select id="product-new-select" onchange="handleProductChange('new', this.value)" class="w-full px-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 transition-all text-sm cursor-pointer">
-                                    <option value="" disabled selected>Select Replacement...</option>
-                                    <option value="Wide Cut Trousers">Wide Cut Trousers</option>
-                                    <option value="studio trousers">studio trousers</option>
-                                    <option value="Slim Fit Tee">Slim Fit Tee</option>
-                                    <option value="Vintage Tee">Vintage Tee</option>
-                                    <option value="Muscle Tee">Muscle Tee</option>
-                                    <option value="Overlay Tee">Overlay Tee</option>
-                                    <option value="Black Jacket">Black Jacket</option>
-                                    <option value="Wool Sweater (Grey)">Wool Sweater (Grey)</option>
-                                    <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
-                                    <option value="Card Holder">Card Holder</option>
-                                    <option value="Journal">Journal</option>
-                                    <option value="custom">Other / Custom...</option>
-                                </select>
+                                <span class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Replacement Items List</span>
                                 
-                                <div id="custom-new-container" class="hidden mt-2">
-                                    <input type="text" id="product-new-custom" class="w-full px-4 py-2 bg-white border border-stone-200 rounded-xl focus:outline-none text-sm" placeholder="Type new custom product name...">
+                                <!-- Container where dynamic lists will be generated -->
+                                <div id="replacement-items-container" class="space-y-2">
+                                    <!-- Dynamic rows injected here -->
                                 </div>
+
+                                <button type="button" onclick="addReplacementRow()" class="mt-2 w-full py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 text-xs font-bold rounded-xl transition-colors flex items-center justify-center space-x-1">
+                                    <span>➕ Add Another Replacement Item</span>
+                                </button>
                             </div>
                         </div>
 
                         <!-- Operations Notes -->
                         <div class="border-t border-stone-100 pt-4">
                             <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="exchange-notes">Operations Notes <span class="text-stone-400">(Optional)</span></label>
-                            <textarea id="exchange-notes" rows="2" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm resize-none" placeholder="Add custom notes or status updates..."></textarea>
+                            <textarea id="exchange-notes" rows="2" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm resize-none"></textarea>
                         </div>
 
                         <!-- No. Tracking Return -->
                         <div class="border-t border-stone-100 pt-4">
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="tracking-num">Return Waybill Tracking <span class="text-stone-400">(Customer ➔ Us)</span></label>
-                            <input type="text" id="tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="Tracking ID">
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="tracking-num">Return Tracking No <span class="text-stone-400">(Customer ➔ Us)</span></label>
+                            <input type="text" id="tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="e.g. 72270529919">
                         </div>
 
                         <!-- No. Tracking Baru (Postage Out) -->
                         <div>
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="new-tracking-num">Outgoing Waybill Tracking <span class="text-stone-400">(Us ➔ Customer)</span></label>
-                            <input type="text" id="new-tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="Tracking ID">
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="new-tracking-num">New Tracking No <span class="text-stone-400">(Us ➔ Customer)</span></label>
+                            <input type="text" id="new-tracking-num" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="e.g. POSLAJU1234">
                         </div>
 
                         <!-- Status Select -->
                         <div>
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="status-select">Fulfillment Status</label>
+                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="status-select">Status</label>
                             <select id="status-select" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
                                 <option value="processing" selected>🔄 Processing</option>
                                 <option value="done">✅ Done Replace</option>
                             </select>
                         </div>
 
-                        <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2 text-sm mt-6 shadow-sm">
+                        <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2 text-sm mt-6">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
-                            <span>Save Request</span>
+                            <span>Save Record</span>
                         </button>
                     </form>
                 </div>
@@ -301,11 +272,11 @@
                 
                 <!-- Open Sidebar Toggle Button -->
                 <div class="flex items-center justify-between gap-4">
-                    <button id="sidebar-toggle-open" onclick="toggleSidebar(true)" class="hidden xl:flex items-center space-x-2 bg-stone-900 text-white px-4 py-2.5 rounded-xl shadow-md hover:bg-stone-800 transition-colors text-sm font-semibold" title="Show Registration Form">
+                    <button id="sidebar-toggle-open" onclick="toggleSidebar(true)" class="hidden xl:flex items-center space-x-2 bg-stone-900 text-white px-4 py-2.5 rounded-xl shadow-md hover:bg-stone-800 transition-colors text-sm font-semibold" title="Open Registration Form">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
-                        <span>Add New Entry (▶ Open Form)</span>
+                        <span>Add New Record (▶ Form)</span>
                     </button>
                     <div class="flex-grow"></div>
                 </div>
@@ -319,7 +290,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </span>
-                        <input type="text" id="search-bar" oninput="filterData()" placeholder="Search name, Order ID, product, or notes..." class="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
+                        <input type="text" id="search-bar" oninput="filterData()" placeholder="Search customer, order ID, product, or notes..." class="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                     </div>
 
                     <!-- Status Filter Buttons -->
@@ -334,30 +305,30 @@
                 <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 border-b border-stone-100 flex justify-between items-center bg-white">
                         <div class="flex items-center space-x-2">
-                            <h3 class="font-bold text-stone-800 text-base">Exchange Registry</h3>
+                            <h3 class="font-bold text-stone-800 text-base">Exchange List</h3>
                             <button id="sidebar-mobile-trigger" onclick="toggleSidebar(true)" class="xl:hidden inline-flex items-center text-xs text-stone-500 hover:text-stone-900 border border-stone-200 bg-stone-50 px-2 py-1 rounded">
-                                ➕ New Entry
+                                ➕ Add Record
                             </button>
                         </div>
-                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-semibold transition-colors">Wipe All Records</button>
+                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors">Delete All Data</button>
                     </div>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[1100px]">
                             <thead>
                                 <tr class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wider font-semibold border-b border-stone-100">
-                                    <th class="px-6 py-3.5" style="width: 14%;">Customer</th>
+                                    <th class="px-6 py-3.5" style="width: 15%;">Customer</th>
                                     <th class="px-4 py-3.5" style="width: 10%;">Order ID</th>
-                                    <th class="px-4 py-3.5" style="width: 18%;">Operations Notes</th>
-                                    <th class="px-4 py-3.5" style="width: 20%;">Product &amp; Size Exchange</th>
+                                    <th class="px-4 py-3.5" style="width: 20%;">Operations Notes</th>
+                                    <th class="px-4 py-3.5" style="width: 24%;">Exchange Details</th>
                                     <th class="px-4 py-3.5" style="width: 13%;">Return Tracking</th>
                                     <th class="px-4 py-3.5 text-center" style="width: 5%;">Status</th>
                                     <th class="px-4 py-3.5" style="width: 13%;">New Tracking</th>
-                                    <th class="px-6 py-3.5 text-right" style="width: 7%;">Actions</th>
+                                    <th class="px-6 py-3.5 text-right" style="width: 2%;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="orders-tbody" class="divide-y divide-stone-100 text-sm">
-                                <!-- Data populated dynamically in script -->
+                                <!-- Loaded dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -367,160 +338,93 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-stone-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0V9a2 2 0 00-2-2H6a2 2 0 00-2 2v2m0 4h18" />
                         </svg>
-                        <p class="text-stone-500 font-medium text-sm">No match found</p>
-                        <p class="text-stone-400 text-xs mt-1">Please register a new record to begin.</p>
+                        <p class="text-stone-500 font-medium text-sm">No records found</p>
+                        <p class="text-stone-400 text-xs mt-1">Please enter a new record in the registration form.</p>
                     </div>
                 </div>
 
             </div>
         </div>
 
-        <!-- TAB 2: ADVANCED EXECUTIVE ANALYTICS -->
+        <!-- MAIN LAYOUT: TAB 2 (REPORTS DASHBOARD FOR MANAGER / CEO) -->
         <div id="tab-reports-content" class="hidden space-y-6">
             
-            <!-- ADVANCED METRIC CARDS -->
+            <!-- ANALYTICAL STATS BANNER -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- KPI 1 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold uppercase tracking-wider text-stone-400">Completion Ratio</p>
-                            <span class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded-full font-bold">Velocity</span>
-                        </div>
-                        <h3 class="text-3xl font-extrabold mt-2 text-stone-900" id="report-completion-rate">0%</h3>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-stone-100 text-xs text-stone-500">
-                        Overall processed vs replaced items.
-                    </div>
+                <div class="bg-stone-900 text-white p-5 rounded-2xl shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-stone-400">Completion Ratio</p>
+                    <h3 class="text-3xl font-bold mt-1 text-emerald-400" id="report-completion-rate">0%</h3>
+                    <p class="text-xs text-stone-400 mt-2">Done vs Total Applications</p>
                 </div>
-
-                <!-- KPI 2 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold uppercase tracking-wider text-stone-400">Top Painpoint Product</p>
-                            <span class="text-[10px] bg-red-50 text-red-700 border border-red-100 px-2 py-0.5 rounded-full font-bold">High Risk</span>
-                        </div>
-                        <h3 class="text-base font-extrabold mt-3 text-stone-900 truncate" id="report-top-product">Calculating...</h3>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-stone-100 text-xs text-stone-500">
-                        Item with highest sizing errors.
-                    </div>
+                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-stone-500">Top Problem Product</p>
+                    <h3 class="text-lg font-bold mt-1 text-stone-850 truncate" id="report-top-product">Calculating...</h3>
+                    <p class="text-xs text-stone-400 mt-2">Product with highest sizing errors</p>
                 </div>
-
-                <!-- KPI 3 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold uppercase tracking-wider text-stone-400 font-mono">Top Requested Size</p>
-                            <span class="text-[10px] bg-stone-100 text-stone-700 border border-stone-200 px-2 py-0.5 rounded-full font-bold">Migration</span>
-                        </div>
-                        <h3 class="text-3xl font-extrabold mt-2 text-stone-900" id="report-top-size">None</h3>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-stone-100 text-xs text-stone-500">
-                        Most requested size replacement.
-                    </div>
+                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-stone-500">Top Requested Swap Size</p>
+                    <h3 class="text-3xl font-bold mt-1 text-amber-600" id="report-top-size">None</h3>
+                    <p class="text-xs text-stone-400 mt-2">Most requested size replacement</p>
                 </div>
-
-                <!-- KPI 4 -->
-                <div class="bg-stone-900 p-5 rounded-2xl text-white shadow-md flex flex-col justify-between relative overflow-hidden">
-                    <div class="absolute right-0 bottom-0 translate-x-3 translate-y-3 opacity-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold uppercase tracking-wider text-stone-400">Postage Loss Meter</p>
-                            <span class="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider font-mono">Est Loss</span>
-                        </div>
-                        <h3 class="text-3xl font-extrabold mt-2 text-amber-400" id="report-postage-cost">RM0.00</h3>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-stone-800 text-xs text-stone-400">
-                        Calculated at RM8 per completed exchange.
-                    </div>
+                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-stone-500">Est. Logistics Sizing Cost</p>
+                    <h3 class="text-3xl font-bold mt-1 text-red-600" id="report-total-cost">RM 0.00</h3>
+                    <p class="text-xs text-stone-400 mt-2">Calculated at RM8 per completed swap</p>
                 </div>
             </div>
 
-            <!-- GEMINI AI EXECUTIVE COMPILER -->
-            <div class="bg-gradient-to-r from-amber-50/60 to-orange-50/60 p-6 rounded-3xl border border-amber-200/50 shadow-sm space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2.5 bg-amber-500 text-stone-950 rounded-2xl animate-pulse shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-extrabold text-stone-900 text-base leading-tight">Gemini Strategic Sizing Report</h4>
-                            <p class="text-xs text-stone-500">Live operational audit and strategic size advice generated directly by AI.</p>
-                        </div>
-                    </div>
-                    <button onclick="generateStrategicReport()" id="btn-ai-generate" class="bg-stone-950 hover:bg-stone-800 text-white font-bold py-2.5 px-5 rounded-xl text-xs transition-all shadow-sm flex items-center space-x-2">
-                        <span id="ai-btn-text">Generate AI Strategic Audit</span>
-                    </button>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-stone-200 p-5 shadow-inner min-h-[140px] relative">
-                    <!-- Loading overlay -->
-                    <div id="ai-loading-overlay" class="absolute inset-0 bg-white/95 rounded-2xl flex flex-col items-center justify-center space-y-3 hidden">
-                        <div class="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                        <p class="text-xs font-bold text-stone-700 animate-pulse">Gemini is compiling sizing charts, telemetry, and logistics logs...</p>
-                    </div>
-
-                    <!-- Report Content -->
-                    <div id="ai-report-content" class="text-xs leading-relaxed text-stone-700 space-y-3 font-medium">
-                        <p class="text-stone-400 italic text-center py-8">Click "Generate AI Strategic Audit" to prompt Gemini to compile a deep statistical sizing report using the current active database.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GRAPHICAL CHARTS GRID -->
+            <!-- GRAPHICAL CHARTS AREA -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Chart 1: Time Series Trend Line -->
-                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between lg:col-span-2">
-                    <div class="mb-4">
-                        <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Historical Exchange Volume Trend</h4>
-                        <p class="text-xs text-stone-400">Sizing mismatch rate velocity plotted against dates.</p>
-                    </div>
-                    <div class="relative h-64">
-                        <canvas id="chart-trends"></canvas>
-                    </div>
-                </div>
-
-                <!-- Chart 2: Status Breakdown -->
+                
+                <!-- Status Breakdown (Pie) -->
                 <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between">
                     <div class="mb-4">
-                        <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Status Distribution Percentage</h4>
-                        <p class="text-xs text-stone-400">Operations efficiency split ratio.</p>
+                        <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Status Distribution</h4>
+                        <p class="text-xs text-stone-400">Current ratio of operations backlog</p>
                     </div>
-                    <div class="relative h-60 flex items-center justify-center">
+                    <div class="relative h-64 flex items-center justify-center">
                         <canvas id="chart-status"></canvas>
                     </div>
                 </div>
+
+                <!-- Top Products Chart (Bar) -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between lg:col-span-2">
+                    <div class="mb-4">
+                        <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Exchange Frequency by Product</h4>
+                        <p class="text-xs text-stone-400">Highlights catalog patterns requiring production specification adjustment</p>
+                    </div>
+                    <div class="relative h-64">
+                        <canvas id="chart-products"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Chart 3: Size Migration Matrix Chart -->
+                <!-- Size Demand Breakdown (Bar) -->
                 <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between lg:col-span-2">
                     <div class="mb-4">
-                        <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Size Migration Comparison Index</h4>
-                        <p class="text-xs text-stone-400">Compares purchased sizes vs replacement size requests to detect fit problems.</p>
+                        <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Original Size vs Replacement Demand</h4>
+                        <p class="text-xs text-stone-400">Sizing migration vector (detects loose/tight fits across sizing curves)</p>
                     </div>
                     <div class="relative h-64">
                         <canvas id="chart-sizes"></canvas>
                     </div>
                 </div>
 
-                <!-- Inventory checklist summary guide -->
+                <!-- Manager Summary Table -->
                 <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between">
                     <div>
                         <h4 class="font-bold text-stone-800 text-sm uppercase tracking-wider mb-2">Restock Priority Guide</h4>
-                        <p class="text-xs text-stone-400 mb-4">Urgent list of products experiencing sizing errors that need safety stock buffer adjustments.</p>
+                        <p class="text-xs text-stone-400 mb-4">Urgent replacement list of items showing high sizing variations</p>
                         
                         <div class="divide-y divide-stone-100 max-h-60 overflow-y-auto pr-1" id="report-summary-list">
-                            <!-- Populated dynamically in JavaScript -->
+                            <!-- Populated dynamically -->
                         </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-stone-100 flex space-x-2">
+                        <button onclick="window.print()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-2 rounded-xl text-xs transition-colors">
+                            🖨️ Export Full Report (PDF)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -540,76 +444,6 @@
         </div>
     </div>
 
-    <!-- AI RESPONSE GENERATION ASSISTANT MODAL -->
-    <div id="ai-message-modal" class="fixed inset-0 bg-black/55 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
-        <div class="bg-white rounded-3xl p-6 max-w-2xl w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-200 flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-start pb-4 border-b border-stone-100">
-                <div class="flex items-center space-x-2">
-                    <span class="p-1 bg-amber-500 text-stone-900 rounded-lg text-xs font-black">AI</span>
-                    <div>
-                        <h3 class="text-base font-extrabold text-stone-900">Gemini Customer Response Draft</h3>
-                        <p class="text-[11px] text-stone-500">Auto-generated update communication based on active logistics logs.</p>
-                    </div>
-                </div>
-                <button onclick="hideAiMessageModal()" class="text-stone-400 hover:text-stone-750">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="py-4 space-y-4 overflow-y-auto flex-grow">
-                <!-- Select style/tone -->
-                <div class="grid grid-cols-2 gap-3 bg-stone-50 p-3 rounded-2xl border border-stone-150">
-                    <div>
-                        <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Response Channel</label>
-                        <select id="ai-reply-channel" class="w-full bg-white border border-stone-200 rounded-lg p-1.5 text-xs focus:outline-none">
-                            <option value="whatsapp">💬 WhatsApp / Short Message</option>
-                            <option value="email">✉️ Official Brand Email</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Tone &amp; Lang</label>
-                        <select id="ai-reply-tone" class="w-full bg-white border border-stone-200 rounded-lg p-1.5 text-xs focus:outline-none">
-                            <option value="polite_bm">Polite (Bahasa Melayu)</option>
-                            <option value="premium_en" selected>Premium &amp; Warm (English)</option>
-                            <option value="casual">Casual Friendly</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="relative flex-grow">
-                    <!-- Spinning loading overlay -->
-                    <div id="ai-modal-loading-overlay" class="absolute inset-0 bg-white/95 rounded-2xl flex flex-col items-center justify-center space-y-3 hidden">
-                        <div class="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                        <p class="text-xs font-bold text-stone-700 animate-pulse">Drafting with Gemini...</p>
-                    </div>
-                    
-                    <textarea id="ai-draft-textarea" rows="10" class="w-full p-4 border border-stone-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs font-mono text-stone-700 bg-stone-50 focus:bg-white resize-none h-[280px]"></textarea>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="flex justify-between items-center pt-3 border-t border-stone-100 text-xs font-semibold">
-                <button onclick="regenerateAiMessage()" class="text-stone-600 hover:text-stone-900 border border-stone-200 rounded-xl px-4 py-2 hover:bg-stone-50 transition-all">
-                    🔄 Re-Draft
-                </button>
-                <div class="flex space-x-2">
-                    <button onclick="hideAiMessageModal()" class="px-4 py-2 text-stone-500 hover:text-stone-700 rounded-xl transition-all">Close</button>
-                    <button onclick="copyDraftToClipboard()" class="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl transition-all shadow-sm flex items-center space-x-1">
-                        <span>📋 Copy Draft Message</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="bg-white border-t border-stone-200 py-6 mt-12 text-center text-xs text-stone-400">
-        <p>© 2026 NOSTALGYA™. All Rights Reserved. Executive Operations Management &amp; AI Analytics Hub.</p>
-    </footer>
-
     <!-- TOAST POPUP NOTIFICATION -->
     <div id="toast" class="fixed bottom-5 right-5 bg-stone-900 text-white px-5 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-2 z-50 text-sm">
         <span id="toast-icon">✅</span>
@@ -618,40 +452,11 @@
 
     <!-- FIREBASE AND SYSTEM LOGIC (Using Modular ES Script) -->
     <script type="module">
-        // We register safety fallback handles right away before any Firestore imports finish loading
-        window.handleProductChange = handleProductChange;
-        window.toggleProductChangeSection = toggleProductChangeSection;
-        window.handleFormSubmit = handleFormSubmit;
-        window.setStatusFilter = setStatusFilter;
-        window.filterData = filterData;
-        window.toggleStatus = toggleStatus;
-        window.updateTracking = updateTracking;
-        window.copyToClipboard = copyToClipboard;
-        window.deleteRecord = deleteRecord;
-        window.clearAllData = clearAllData;
-        window.updateNotes = updateNotes;
-        window.updateOrderNum = updateOrderNum;
-        window.toggleFirebaseSettings = toggleFirebaseSettings;
-        window.saveFirebaseConfig = saveFirebaseConfig;
-        window.resetToLocal = resetToLocal;
-        window.toggleSidebar = toggleSidebar;
-        window.switchTab = switchTab;
-        window.renderReports = renderReports;
-        window.hideConfirmModal = hideConfirmModal;
-        window.executeConfirmedAction = executeConfirmedAction;
-        
-        // AI functions declared globally
-        window.openAiReplyModal = openAiReplyModal;
-        window.hideAiMessageModal = hideAiMessageModal;
-        window.regenerateAiMessage = regenerateAiMessage;
-        window.copyDraftToClipboard = copyDraftToClipboard;
-        window.generateStrategicReport = generateStrategicReport;
-
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
         import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
-        // Pre-populated active database matching original screenshots & records
+        // Pre-populated active database matching original screenshots, with backwards-compatible structures
         const initialMockData = [
             {
                 id: '1779689338624',
@@ -659,8 +464,9 @@
                 orderNum: '#NO1059',
                 productOriginal: 'studio trousers',
                 sizeOriginal: 'XL',
-                productNew: 'studio trousers',
-                sizeNew: 'XXL',
+                replacements: [
+                    { product: 'studio trousers', size: 'XXL', qty: 1 }
+                ],
                 trackingNum: '7227052991944216',
                 newTrackingNum: '',
                 notes: 'WAITING FOR CUSTOMER RETURN',
@@ -674,8 +480,9 @@
                 orderNum: '#NO1056',
                 productOriginal: 'studio trousers',
                 sizeOriginal: 'XXL',
-                productNew: 'studio trousers',
-                sizeNew: 'L',
+                replacements: [
+                    { product: 'studio trousers', size: 'L', qty: 1 }
+                ],
                 trackingNum: '7227052991947916',
                 newTrackingNum: '',
                 notes: 'WAITING FOR CUSTOMER RETURN',
@@ -689,11 +496,13 @@
                 orderNum: '#NO1050',
                 productOriginal: 'Overlay Tee',
                 sizeOriginal: 'L',
-                productNew: 'Overlay Tee',
-                sizeNew: 'M',
+                replacements: [
+                    { product: 'Overlay Tee', size: 'M', qty: 1 },
+                    { product: 'Slim Fit Tee', size: 'L', qty: 1 } // Example of multi-item exchange
+                ],
                 trackingNum: '7228052991953116',
                 newTrackingNum: '',
-                notes: 'WAITING FOR CUSTOMER RETURN',
+                notes: 'CUSTOMER WANTS TO ADD A SLIM FIT TEE AS PART OF EXCHANGE LIST',
                 status: 'processing',
                 date: '2026-05-25',
                 createdAt: 1779688491670
@@ -704,8 +513,9 @@
                 orderNum: '#NO1067',
                 productOriginal: 'Black Jacket',
                 sizeOriginal: '2XL',
-                productNew: 'Black Jacket',
-                sizeNew: 'XL',
+                replacements: [
+                    { product: 'Black Jacket', size: 'XL', qty: 1 }
+                ],
                 trackingNum: '7228051638430626',
                 newTrackingNum: '',
                 notes: 'WAITING FOR CUSTOMER RETURN',
@@ -719,11 +529,12 @@
                 orderNum: '#NO1036',
                 productOriginal: 'Vintage Tee',
                 sizeOriginal: 'XL',
-                productNew: 'Slim Fit Tee',
-                sizeNew: 'XL',
+                replacements: [
+                    { product: 'Slim Fit Tee', size: 'XL', qty: 1 }
+                ],
                 trackingNum: '7227058243241456',
                 newTrackingNum: '',
-                notes: 'CUSTOMER SENT BY LALAMOVE DAMANSARA',
+                notes: 'CUSTOMER EXCHANGED BY LALAMOVE DAMANSARA',
                 status: 'done',
                 date: '2026-05-25',
                 createdAt: 1779685214528
@@ -736,12 +547,9 @@
         let isDeleteAll = false;
         let activeTab = 'records';
         
-        // Gemini state management
-        let currentSelectedExchangeForAi = null;
-        
         // Chart instances
         let statusChartInstance = null;
-        let trendChartInstance = null;
+        let productChartInstance = null;
         let sizeChartInstance = null;
 
         // Cloud integration states
@@ -751,9 +559,11 @@
         let unsubscribeExchanges = null;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'nostalgya-tracking';
 
+        // On window load
         window.onload = function() {
             setupSystem();
             
+            // Check previous sidebar layout preference (Rule local persistent)
             const sidebarPref = localStorage.getItem('nostalgya_sidebar_state');
             if (sidebarPref === 'collapsed') {
                 toggleSidebar(false);
@@ -761,24 +571,15 @@
                 toggleSidebar(true);
             }
 
-            const cancelBtn = document.getElementById('confirm-cancel-btn');
-            if (cancelBtn) cancelBtn.addEventListener('click', hideConfirmModal);
-            
-            const okBtn = document.getElementById('confirm-ok-btn');
-            if (okBtn) okBtn.addEventListener('click', executeConfirmedAction);
+            // Set up Modal listeners
+            document.getElementById('confirm-cancel-btn').addEventListener('click', hideConfirmModal);
+            document.getElementById('confirm-ok-btn').addEventListener('click', executeConfirmedAction);
 
-            // Populate custom saved key if any
-            const savedGeminiKey = localStorage.getItem('nostalgya_gemini_key');
-            if (savedGeminiKey) {
-                document.getElementById('gemini-key-input').value = savedGeminiKey;
-            }
-
-            // Register event change listeners for Tone & Channel in AI reply modal to auto-generate
-            document.getElementById('ai-reply-channel').addEventListener('change', () => regenerateAiMessage());
-            document.getElementById('ai-reply-tone').addEventListener('change', () => regenerateAiMessage());
+            // Populate initial dynamic replacement row
+            addReplacementRow();
         };
 
-        // Firebase connection logic
+        // Firebase Setup & Initialization Flow
         async function setupSystem() {
             let firebaseConfig = {
                 apiKey: "AIzaSyDtR9_Tj3XasUPvPkqIvZWdXwqn254Dyzc",
@@ -786,7 +587,7 @@
                 projectId: "nostalgya-tracking",
                 storageBucket: "nostalgya-tracking.firebasestorage.app",
                 messagingSenderId: "926756039356",
-                appId: "1:926756039356:web:84639463018dff0cdebeb9"
+                appId: "1:926756039356:web:84639463018dff0cedbeb9"
             };
 
             if (typeof __firebase_config !== 'undefined' && __firebase_config) {
@@ -810,7 +611,7 @@
             }
 
             if (firebaseConfig) {
-                updateConnectionStatus('connecting', 'Connecting to Cloud Sync...');
+                updateConnectionStatus('connecting', 'Connecting to Cloud...');
                 try {
                     const app = initializeApp(firebaseConfig);
                     auth = getAuth(app);
@@ -825,7 +626,7 @@
                     onAuthStateChanged(auth, (user) => {
                         if (user) {
                             usingCloud = true;
-                            updateConnectionStatus('cloud', '🟢 Cloud Sync Active');
+                            updateConnectionStatus('cloud', '🟢 Cloud Mode (Live Shared Sync)');
                             listenToCloudExchanges();
                         } else {
                             fallbackToLocalStorage();
@@ -833,11 +634,11 @@
                     });
 
                 } catch (err) {
-                    console.error("Firebase connection failed. Reverting to LocalStorage.", err);
-                    fallbackToLocalStorage('🔴 Cloud Offline (Local Storage Mode)');
+                    console.error("Firebase connection failed. Falling back to LocalStorage.", err);
+                    fallbackToLocalStorage('🔴 Connection Failed (Local Mode)');
                 }
             } else {
-                fallbackToLocalStorage('🟡 Local Storage Mode (Offline)');
+                fallbackToLocalStorage('🟡 Local Mode (Click ⚙️ to Connect Cloud)');
             }
         }
 
@@ -860,11 +661,10 @@
             const dot = document.getElementById('connection-dot');
             const label = document.getElementById('connection-text');
 
-            if (label) label.innerText = text;
-            if (!badge || !dot) return;
+            label.innerText = text;
 
-            badge.className = "inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold ";
-            dot.className = "w-2.5 h-2.5 mr-2 rounded-full ";
+            badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ";
+            dot.className = "w-2 h-2 mr-2 rounded-full ";
 
             if (type === 'connecting') {
                 badge.classList.add('bg-stone-100', 'text-stone-700', 'border-stone-200');
@@ -878,7 +678,7 @@
             }
         }
 
-        // Realtime Firestore Listener
+        // Firestore real-time listener (Rules 1 & 2)
         function listenToCloudExchanges() {
             if (unsubscribeExchanges) unsubscribeExchanges();
 
@@ -913,7 +713,7 @@
                 }
             }, (error) => {
                 console.error("Firestore loading error: ", error);
-                showToast("Failed to load cloud. Falling back to local storage.", "⚠️");
+                showToast("Failed to load cloud data. Reverting to Local Storage.", "⚠️");
                 fallbackToLocalStorage('🔴 Cloud Error (Local Mode)');
             });
         }
@@ -922,7 +722,7 @@
             localStorage.setItem('nostalgya_exchanges_v4', JSON.stringify(exchanges));
         }
 
-        // Tab switching logic
+        // Switch between tabs
         function switchTab(tabName) {
             activeTab = tabName;
             const recordsContent = document.getElementById('tab-records-content');
@@ -931,222 +731,37 @@
             const reportsBtn = document.getElementById('tab-reports-btn');
 
             if (tabName === 'records') {
-                if (recordsContent) recordsContent.classList.remove('hidden');
-                if (reportsContent) reportsContent.classList.add('hidden');
+                recordsContent.classList.remove('hidden');
+                reportsContent.classList.add('hidden');
                 
-                if (recordsBtn) recordsBtn.className = "px-6 py-3 text-sm font-bold border-b-2 border-stone-900 text-stone-900 transition-all flex items-center space-x-2";
-                if (reportsBtn) reportsBtn.className = "px-6 py-3 text-sm font-semibold border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition-all flex items-center space-x-2";
+                recordsBtn.className = "px-5 py-3 text-sm font-bold border-b-2 border-stone-900 text-stone-900 transition-all flex items-center space-x-2";
+                reportsBtn.className = "px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition-all flex items-center space-x-2";
             } else {
-                if (recordsContent) recordsContent.classList.add('hidden');
-                if (reportsContent) reportsContent.classList.remove('hidden');
+                recordsContent.classList.add('hidden');
+                reportsContent.classList.remove('hidden');
                 
-                if (recordsBtn) recordsBtn.className = "px-6 py-3 text-sm font-semibold border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition-all flex items-center space-x-2";
-                if (reportsBtn) reportsBtn.className = "px-6 py-3 text-sm font-bold border-b-2 border-stone-900 text-stone-900 transition-all flex items-center space-x-2";
+                recordsBtn.className = "px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition-all flex items-center space-x-2";
+                reportsBtn.className = "px-5 py-3 text-sm font-bold border-b-2 border-stone-900 text-stone-900 transition-all flex items-center space-x-2";
                 
-                // Initialize/Update Dashboard Reports
+                // Initialize/Update Laporan & Charts
                 renderReports();
             }
         }
 
-        // Gemini API Native Caller Utility
-        async function callGeminiApi(prompt, systemInstruction = "") {
-            // Priority 1: User's entered API key from Cloud config panel
-            // Priority 2: Empty string fallback which canvas platform handles if running in compilation frame
-            let customKey = document.getElementById('gemini-key-input').value.trim();
-            const apiKey = customKey || "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: systemInstruction ? {
-                    parts: [{ text: systemInstruction }]
-                } : undefined
-            };
-
-            let retryDelay = 1000;
-            const maxRetries = 3;
-
-            for (let attempt = 0; attempt < maxRetries; attempt++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (text) return text;
-                        throw new Error("Invalid Gemini response format.");
-                    }
-
-                    // Handle rate limits / resource exhaustion
-                    if (response.status === 429 && attempt < maxRetries - 1) {
-                        await new Promise(resolve => setTimeout(resolve, retryDelay));
-                        retryDelay *= 2;
-                        continue;
-                    }
-                    throw new Error(`Gemini API returned status ${response.status}`);
-                } catch (error) {
-                    if (attempt === maxRetries - 1) {
-                        console.error("Gemini invocation failed completely:", error);
-                        throw error;
-                    }
-                    await new Promise(resolve => setTimeout(resolve, retryDelay));
-                    retryDelay *= 2;
-                }
-            }
-        }
-
-        // Strategic report compiler
-        async function generateStrategicReport() {
-            const loadingOverlay = document.getElementById('ai-loading-overlay');
-            const reportBox = document.getElementById('ai-report-content');
-            if (loadingOverlay) loadingOverlay.classList.remove('hidden');
-
-            try {
-                // Compile the data list for prompt context
-                const compiledData = exchanges.map(item => ({
-                    customer: item.name,
-                    product: item.productOriginal,
-                    sizePurchased: item.sizeOriginal,
-                    sizeRequested: item.sizeNew,
-                    status: item.status,
-                    notes: item.notes || "None"
-                }));
-
-                const systemInstruction = "You are a world-class retail logistics and size-chart analyst. Analyze the provided sizing exchange registry. Be highly executive, strategic, professional, and outline clear metrics. Provide action steps to fix return rate problems.";
-                const prompt = `Here is our current active size exchange database registry:
-                ${JSON.stringify(compiledData, null, 2)}
-
-                Please compile a strategic sizing report for the manager of NOSTALGYA. Keep it concise, professional, and action-oriented. Include:
-                1. **High-Risk Products**: Which products have the highest sizing failure rate?
-                2. **Sizing Migration Directions**: What size adjustments are customers requesting (e.g. up-sizing or down-sizing)?
-                3. **Actionable Sizing Advice**: What specific revisions should be made on our online web-store size chart?
-                4. **Operations Efficiency**: How is the ops team doing with processing swaps?
-                
-                Format with bold titles and neat spacing. Keep it to around 3 paragraphs max.`;
-
-                const responseText = await callGeminiApi(prompt, systemInstruction);
-                
-                if (reportBox) {
-                    // Simple Markdown-to-HTML parser to make standard LLM replies look great in UI
-                    reportBox.innerHTML = parseMarkdownToHtml(responseText);
-                }
-            } catch (err) {
-                console.error(err);
-                if (reportBox) {
-                    reportBox.innerHTML = `<span class="text-red-500 font-bold">⚠️ Sizing Report Failed to Generate.</span><br><br>Please check your Gemini API key in the Cloud settings configuration or try again in a few moments. Reason: ${err.message}`;
-                }
-            } finally {
-                if (loadingOverlay) loadingOverlay.classList.add('hidden');
-            }
-        }
-
-        // Open the dynamic modal to compose custom updates
-        function openAiReplyModal(id) {
-            const target = exchanges.find(item => item.id === id);
-            if (!target) return;
-            
-            currentSelectedExchangeForAi = target;
-            
-            const modal = document.getElementById('ai-message-modal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    const innerDiv = modal.querySelector('div');
-                    if (innerDiv) innerDiv.classList.remove('scale-95');
-                }, 10);
-            }
-            regenerateAiMessage();
-        }
-
-        function hideAiMessageModal() {
-            const modal = document.getElementById('ai-message-modal');
-            if (modal) {
-                modal.classList.add('opacity-0');
-                const innerDiv = modal.querySelector('div');
-                if (innerDiv) innerDiv.classList.add('scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    currentSelectedExchangeForAi = null;
-                }, 200);
-            }
-        }
-
-        async function regenerateAiMessage() {
-            if (!currentSelectedExchangeForAi) return;
-            const channel = document.getElementById('ai-reply-channel').value;
-            const tone = document.getElementById('ai-reply-tone').value;
-            const textarea = document.getElementById('ai-draft-textarea');
-            const loading = document.getElementById('ai-modal-loading-overlay');
-
-            if (loading) loading.classList.remove('hidden');
-
-            try {
-                const sysPrompt = "You are a warm, premium, elite customer support concierge at NOSTALGYA fashion house. Write responses that are professional, helpful, polite, and reassuring.";
-                const prompt = `Compose a customer update message for:
-                Customer Name: ${currentSelectedExchangeForAi.name}
-                Order Reference: ${currentSelectedExchangeForAi.orderNum}
-                Product exchanged: ${currentSelectedExchangeForAi.productOriginal} (${currentSelectedExchangeForAi.sizeOriginal}) -> ${currentSelectedExchangeForAi.productNew || currentSelectedExchangeForAi.productOriginal} (${currentSelectedExchangeForAi.sizeNew})
-                Return Tracking Waybill (Customer to us): ${currentSelectedExchangeForAi.trackingNum || "Awaiting submission"}
-                Outgoing New Tracking (Us to customer): ${currentSelectedExchangeForAi.newTrackingNum || "Awaiting dispatch"}
-                Current fulfillment status: ${currentSelectedExchangeForAi.status === 'done' ? 'Completed/Swapped' : 'Still Processing / Waiting for return shipment'}
-                Operations Notes: ${currentSelectedExchangeForAi.notes || "None"}
-
-                Channel format requested: ${channel === 'whatsapp' ? 'Short, spacing-optimized WhatsApp message with bold key points and friendly emojis' : 'Official, elegantly typed brand email with clear Subject and signature.'}
-                Tone & Language required: ${tone === 'polite_bm' ? 'Extremely polite, warm Malay (Bahasa Melayu)' : tone === 'casual' ? 'Friendly, casual, stylish and approachable English' : 'Premium, elite, polite and warm English'}
-
-                Do not include generic developer brackets or placeholders. Generate a ready-to-send copy.`;
-
-                const draftText = await callGeminiApi(prompt, sysPrompt);
-                if (textarea) textarea.value = draftText;
-            } catch (err) {
-                console.error(err);
-                if (textarea) textarea.value = `⚠️ AI Concierge Offline.\n\nFailed to draft reply. Ensure your Gemini API Key is saved or valid.\n\nError: ${err.message}`;
-            } finally {
-                if (loading) loading.classList.add('hidden');
-            }
-        }
-
-        function copyDraftToClipboard() {
-            const text = document.getElementById('ai-reply-channel').value === 'email' ? 
-                document.getElementById('ai-draft-textarea').value : 
-                document.getElementById('ai-draft-textarea').value;
-            copyToClipboard(text);
-            showToast("AI reply draft copied!");
-        }
-
-        // Simple Markdown parser
-        function parseMarkdownToHtml(markdown) {
-            return markdown
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/### (.*?)\n/g, '<h5 class="text-stone-900 font-bold mt-3 mb-1 text-sm">$1</h5>')
-                .replace(/## (.*?)\n/g, '<h4 class="text-stone-950 font-extrabold mt-4 mb-2 text-base">$1</h4>')
-                .replace(/- (.*?)\n/g, '<li class="ml-4 list-disc">$1</li>')
-                .replace(/\n\n/g, '<br><br>');
-        }
-
-        // Advanced Manager Analytics tab calculation
+        // Generate Laporan metrics and charts
         function renderReports() {
-            let filteredExchanges = [...exchanges];
-            
-            const total = filteredExchanges.length;
-            const processing = filteredExchanges.filter(item => item.status === 'processing').length;
-            const done = filteredExchanges.filter(item => item.status === 'done').length;
+            const total = exchanges.length;
+            const processing = exchanges.filter(item => item.status === 'processing').length;
+            const done = exchanges.filter(item => item.status === 'done').length;
 
-            // 1. Completion Ratio
+            // Calculate Completion Rate
             const rate = total > 0 ? Math.round((done / total) * 100) : 0;
-            const completionRateEl = document.getElementById('report-completion-rate');
-            if (completionRateEl) completionRateEl.innerText = `${rate}%`;
+            document.getElementById('report-completion-rate').innerText = `${rate}%`;
 
-            // 2. High Risk/Sizing Painpoint Product
+            // Calculate top product returned
             const productCounts = {};
-            filteredExchanges.forEach(item => {
-                const p = item.productOriginal || 'Unknown Product';
+            exchanges.forEach(item => {
+                const p = item.productOriginal || 'Product';
                 productCounts[p] = (productCounts[p] || 0) + 1;
             });
             let topProduct = 'No Data';
@@ -1157,14 +772,17 @@
                     topProduct = prod;
                 }
             });
-            const topProdEl = document.getElementById('report-top-product');
-            if (topProdEl) topProdEl.innerText = topProduct;
+            document.getElementById('report-top-product').innerText = topProduct;
 
-            // 3. Top Size requested
+            // Calculate top requested size (including dynamic multiple replacements)
             const sizeCounts = {};
-            filteredExchanges.forEach(item => {
-                const s = item.sizeNew || 'N/A';
-                sizeCounts[s] = (sizeCounts[s] || 0) + 1;
+            exchanges.forEach(item => {
+                const replacements = getNormalizedReplacements(item);
+                replacements.forEach(rep => {
+                    const s = rep.size || 'N/A';
+                    const qty = parseInt(rep.qty || 1);
+                    sizeCounts[s] = (sizeCounts[s] || 0) + qty;
+                });
             });
             let topSize = 'None';
             let maxSizeCount = 0;
@@ -1174,233 +792,267 @@
                     topSize = sz;
                 }
             });
-            const topSizeEl = document.getElementById('report-top-size');
-            if (topSizeEl) topSizeEl.innerText = topSize;
+            document.getElementById('report-top-size').innerText = topSize;
 
-            // 4. Estimated Postage Cost Loss (RM 8.00 per completed exchange)
-            const postageEstimate = done * 8;
-            const postageCostEl = document.getElementById('report-postage-cost');
-            if (postageCostEl) postageCostEl.innerText = `RM ${postageEstimate.toFixed(2)}`;
+            // Financial Postage Cost Meter: RM 8.00 per completed exchange application
+            const totalCost = done * 8;
+            document.getElementById('report-total-cost').innerText = `RM ${totalCost.toFixed(2)}`;
 
-            // 5. Daily Exchanges average rate
-            const uniqueDates = [...new Set(filteredExchanges.map(item => item.date))].length;
-            const perDay = uniqueDates > 0 ? (total / uniqueDates).toFixed(1) : total;
-            const exchangesPerDayEl = document.getElementById('report-exchanges-per-day');
-            if (exchangesPerDayEl) exchangesPerDayEl.innerText = perDay;
+            // Render Chart.js visualizations
+            initCharts(processing, done, productCounts);
 
-            // 6. Restock priorities checklist
+            // Build Inventory summary checklist
             const summaryContainer = document.getElementById('report-summary-list');
-            if (summaryContainer) {
-                summaryContainer.innerHTML = '';
-                Object.keys(productCounts).forEach(prod => {
-                    const count = productCounts[prod];
-                    let priorityText = "Normal";
-                    let priorityClass = "bg-stone-100 text-stone-700";
-                    
-                    if (count >= 3) {
-                        priorityText = "CRITICAL LIMIT";
-                        priorityClass = "bg-red-50 text-red-700 border border-red-100 animate-pulse";
-                    } else if (count >= 2) {
-                        priorityText = "MODERATE RISK";
-                        priorityClass = "bg-amber-50 text-amber-700 border border-amber-100";
-                    }
-
-                    const row = document.createElement('div');
-                    row.className = "flex justify-between items-center py-2.5 text-xs";
-                    row.innerHTML = `
-                        <div class="flex flex-col">
-                            <span class="font-bold text-stone-700 truncate max-w-[170px]">${prod}</span>
-                            <span class="text-[10px] text-stone-400 font-medium">Fault Count: ${count}</span>
-                        </div>
-                        <span class="${priorityClass} font-extrabold px-2.5 py-1 rounded-lg text-[10px] uppercase">${priorityText}</span>
-                    `;
-                    summaryContainer.appendChild(row);
-                });
-                if (Object.keys(productCounts).length === 0) {
-                    summaryContainer.innerHTML = '<p class="text-xs text-stone-400 py-4 text-center">No active telemetry registered.</p>';
-                }
+            summaryContainer.innerHTML = '';
+            
+            Object.keys(productCounts).forEach(prod => {
+                const row = document.createElement('div');
+                row.className = "flex justify-between items-center py-2 text-xs";
+                row.innerHTML = `
+                    <span class="font-medium text-stone-700 truncate max-w-[180px]">${prod}</span>
+                    <span class="bg-stone-100 text-stone-800 font-bold px-2 py-0.5 rounded">${productCounts[prod]} returned</span>
+                `;
+                summaryContainer.appendChild(row);
+            });
+            if (Object.keys(productCounts).length === 0) {
+                summaryContainer.innerHTML = '<p class="text-xs text-stone-400 py-4 text-center">No transactions detected</p>';
             }
-
-            // 8. Visual Charts Draw
-            initCharts(processing, done, productCounts, filteredExchanges);
         }
 
-        // Advanced Chart.js styling & drawing
-        function initCharts(processing, done, productCounts, filteredExchanges) {
+        // Initialize and update visual charts
+        function initCharts(processing, done, productCounts) {
             if (statusChartInstance) statusChartInstance.destroy();
-            if (trendChartInstance) trendChartInstance.destroy();
+            if (productChartInstance) productChartInstance.destroy();
             if (sizeChartInstance) sizeChartInstance.destroy();
 
-            // 1. Doughnut Chart for Operations fulfillment
-            const canvasStatus = document.getElementById('chart-status');
-            if (canvasStatus) {
-                const ctxStatus = canvasStatus.getContext('2d');
-                statusChartInstance = new Chart(ctxStatus, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Processing Backlog', 'Completed Swaps'],
-                        datasets: [{
-                            data: [processing, done],
-                            backgroundColor: ['#f59e0b', '#10b981'],
-                            borderWidth: 3,
-                            borderColor: '#ffffff',
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' } } }
-                        },
-                        cutout: '70%'
+            // Chart 1: Status Distribution
+            const ctxStatus = document.getElementById('chart-status').getContext('2d');
+            statusChartInstance = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Processing Backlog', 'Completed Replacements'],
+                    datasets: [{
+                        data: [processing, done],
+                        backgroundColor: ['#f59e0b', '#10b981'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11 } } }
                     }
-                });
-            }
+                }
+            });
 
-            // 2. Trend Line Chart (Exchanges trend by dates)
-            const canvasTrends = document.getElementById('chart-trends');
-            if (canvasTrends) {
-                const ctxTrend = canvasTrends.getContext('2d');
-                const dateVolumeMap = {};
-                filteredExchanges.forEach(item => {
-                    if (item.date) dateVolumeMap[item.date] = (dateVolumeMap[item.date] || 0) + 1;
-                });
-                const sortedDates = Object.keys(dateVolumeMap).sort();
-                const dateValues = sortedDates.map(d => dateVolumeMap[d]);
+            // Chart 2: Top Products Bar Chart
+            const prodLabels = Object.keys(productCounts);
+            const prodData = Object.values(productCounts);
 
-                // Create a gradient background below the line
-                const grad = ctxTrend.createLinearGradient(0, 0, 0, 300);
-                grad.addColorStop(0, 'rgba(28, 25, 23, 0.15)');
-                grad.addColorStop(1, 'rgba(28, 25, 23, 0)');
-
-                trendChartInstance = new Chart(ctxTrend, {
-                    type: 'line',
-                    data: {
-                        labels: sortedDates,
-                        datasets: [{
-                            label: 'Swap Requests Initiated',
-                            data: dateValues,
-                            borderColor: '#1c1917',
-                            borderWidth: 2.5,
-                            backgroundColor: grad,
-                            fill: true,
-                            tension: 0.35,
-                            pointBackgroundColor: '#1c1917',
-                            pointBorderColor: '#ffffff',
-                            pointHoverRadius: 6,
-                            pointRadius: 4
-                        }]
+            const ctxProduct = document.getElementById('chart-products').getContext('2d');
+            productChartInstance = new Chart(ctxProduct, {
+                type: 'bar',
+                data: {
+                    labels: prodLabels,
+                    datasets: [{
+                        label: 'Fault Returns count',
+                        data: prodData,
+                        backgroundColor: '#1c1917',
+                        borderRadius: 8,
+                        barThickness: 16
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
+                    scales: {
+                        x: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1, font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // Chart 3: Sizes Demand Per Category Chart
+            const sizeOriginalMap = {};
+            const sizeNewMap = {};
+            exchanges.forEach(item => {
+                const orig = item.sizeOriginal || 'N/A';
+                sizeOriginalMap[orig] = (sizeOriginalMap[orig] || 0) + 1;
+
+                const replacements = getNormalizedReplacements(item);
+                replacements.forEach(rep => {
+                    const replacement = rep.size || 'N/A';
+                    const qty = parseInt(rep.qty || 1);
+                    sizeNewMap[replacement] = (sizeNewMap[replacement] || 0) + qty;
+                });
+            });
+
+            const uniqueSizes = [...new Set([...Object.keys(sizeOriginalMap), ...Object.keys(sizeNewMap)])].filter(s => s !== 'N/A');
+            const dataOriginal = uniqueSizes.map(sz => sizeOriginalMap[sz] || 0);
+            const dataReplacement = uniqueSizes.map(sz => sizeNewMap[sz] || 0);
+
+            const ctxSizes = document.getElementById('chart-sizes').getContext('2d');
+            sizeChartInstance = new Chart(ctxSizes, {
+                type: 'bar',
+                data: {
+                    labels: uniqueSizes,
+                    datasets: [
+                        {
+                            label: 'Purchased Original Sizing',
+                            data: dataOriginal,
+                            backgroundColor: '#d6d3d1',
+                            borderRadius: 6
                         },
-                        scales: {
-                            x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Plus Jakarta Sans' } } },
-                            y: { beginAtZero: true, grid: { borderDash: [4, 4] }, ticks: { stepSize: 1, font: { size: 10 } } }
+                        {
+                            label: 'Requested Replacement Sizing',
+                            data: dataReplacement,
+                            backgroundColor: '#f59e0b',
+                            borderRadius: 6
                         }
-                    }
-                });
-            }
-
-            // 3. Size Migration Pattern Comparison Index
-            const canvasSizes = document.getElementById('chart-sizes');
-            if (canvasSizes) {
-                const ctxSizes = canvasSizes.getContext('2d');
-                const originalSizes = {};
-                const requestedSizes = {};
-                filteredExchanges.forEach(item => {
-                    const oSize = item.sizeOriginal || 'N/A';
-                    const nSize = item.sizeNew || 'N/A';
-                    originalSizes[oSize] = (originalSizes[oSize] || 0) + 1;
-                    requestedSizes[nSize] = (requestedSizes[nSize] || 0) + 1;
-                });
-
-                const uniqueSizingClasses = [...new Set([...Object.keys(originalSizes), ...Object.keys(requestedSizes)])].filter(x => x !== 'N/A');
-                const mapOrig = uniqueSizingClasses.map(s => originalSizes[s] || 0);
-                const mapReq = uniqueSizingClasses.map(s => requestedSizes[s] || 0);
-
-                sizeChartInstance = new Chart(ctxSizes, {
-                    type: 'bar',
-                    data: {
-                        labels: uniqueSizingClasses,
-                        datasets: [
-                            {
-                                label: 'Purchased Original Sizing',
-                                data: mapOrig,
-                                backgroundColor: '#e7e5e4',
-                                borderRadius: 4
-                            },
-                            {
-                                label: 'Requested Sizing Swap',
-                                data: mapReq,
-                                backgroundColor: '#fbbf24',
-                                borderRadius: 4
-                            }
-                        ]
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } } }
-                        },
-                        scales: {
-                            x: { grid: { display: false } },
-                            y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } }
-                        }
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                        y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1, font: { size: 10 } } }
                     }
-                });
-            }
+                }
+            });
         }
 
         // Handle Custom Product dropdown logic
-        function handleProductChange(type, val) {
-            const containerId = type === 'original' ? 'custom-original-container' : 'custom-new-container';
-            const inputId = type === 'original' ? 'product-original-custom' : 'product-new-custom';
-            
-            const container = document.getElementById(containerId);
-            const input = document.getElementById(inputId);
-            
-            if (!container || !input) return;
-
-            if (val === 'custom') {
-                container.classList.remove('hidden');
-                input.setAttribute('required', 'true');
-            } else {
-                container.classList.add('hidden');
-                input.removeAttribute('required');
-                input.value = '';
-            }
-        }
-
-        // Toggle "Tukar ke produk lain" section
-        function toggleProductChangeSection(isChecked) {
-            const section = document.getElementById('product-change-section');
-            const selectNew = document.getElementById('product-new-select');
-            const customInput = document.getElementById('product-new-custom');
-            
-            if (!section) return;
-
-            if (isChecked) {
-                section.classList.remove('hidden');
-                if (selectNew) selectNew.setAttribute('required', 'true');
-            } else {
-                section.classList.add('hidden');
-                if (selectNew) {
-                    selectNew.removeAttribute('required');
-                    selectNew.value = '';
+        function handleProductChange(type, val, selectElement) {
+            let container, input;
+            if (type === 'original') {
+                container = document.getElementById('custom-original-container');
+                input = document.getElementById('product-original-custom');
+                if (val === 'custom') {
+                    container.classList.remove('hidden');
+                    input.setAttribute('required', 'true');
+                } else {
+                    container.classList.add('hidden');
+                    input.removeAttribute('required');
+                    input.value = '';
                 }
-                
-                const customContainer = document.getElementById('custom-new-container');
-                if (customContainer) customContainer.classList.add('hidden');
-                if (customInput) {
+            } else if (type === 'replacement') {
+                // Find corresponding custom input container in the same dynamic row
+                const row = selectElement.closest('.replacement-row');
+                const customContainer = row.querySelector('.custom-replacement-container');
+                const customInput = row.querySelector('.custom-replacement-input');
+                if (val === 'custom') {
+                    customContainer.classList.remove('hidden');
+                    customInput.setAttribute('required', 'true');
+                } else {
+                    customContainer.classList.add('hidden');
                     customInput.removeAttribute('required');
                     customInput.value = '';
                 }
+            }
+        }
+
+        // Toggle "Exchange for a different product / multiple items" section
+        function toggleProductChangeSection(isChecked) {
+            const section = document.getElementById('product-change-section');
+            const standardExchangeWrapper = document.getElementById('standard-exchange-size-wrapper');
+            const standardSizingInput = document.getElementById('size-new');
+            
+            if (isChecked) {
+                section.classList.remove('hidden');
+                // Hide standard single sizing inputs since we're using dynamic multi-item rows
+                standardExchangeWrapper.classList.add('hidden');
+                standardSizingInput.removeAttribute('required');
+                
+                // Ensure at least one dynamic row exists
+                const container = document.getElementById('replacement-items-container');
+                if (container.children.length === 0) {
+                    addReplacementRow();
+                }
+            } else {
+                section.classList.add('hidden');
+                standardExchangeWrapper.classList.remove('hidden');
+                standardSizingInput.setAttribute('required', 'true');
+            }
+        }
+
+        // Dynamic replacement products list logic
+        let replacementRowCounter = 0;
+        function addReplacementRow() {
+            const container = document.getElementById('replacement-items-container');
+            const rowId = `replacement-row-${replacementRowCounter++}`;
+            
+            const div = document.createElement('div');
+            div.className = 'replacement-row bg-stone-50 border border-stone-200 p-4 rounded-xl relative space-y-2 mb-2 animate-fadeIn';
+            div.id = rowId;
+            
+            div.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Replacement Item</span>
+                    <button type="button" onclick="removeReplacementRow('${rowId}')" class="text-xs text-red-500 hover:text-red-700 font-semibold focus:outline-none">
+                        ✕ Remove
+                    </button>
+                </div>
+                <!-- Product Select -->
+                <div>
+                    <label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Product Name</label>
+                    <select class="replacement-product-select w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs cursor-pointer focus:outline-none" required>
+                        <option value="" disabled selected>Select Replacement...</option>
+                        <option value="Wide Cut Trousers">Wide Cut Trousers</option>
+                        <option value="studio trousers">studio trousers</option>
+                        <option value="Slim Fit Tee">Slim Fit Tee</option>
+                        <option value="Vintage Tee">Vintage Tee</option>
+                        <option value="Muscle Tee">Muscle Tee</option>
+                        <option value="Overlay Tee">Overlay Tee</option>
+                        <option value="Black Jacket">Black Jacket</option>
+                        <option value="Wool Sweater (Grey)">Wool Sweater (Grey)</option>
+                        <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
+                        <option value="Card Holder">Card Holder</option>
+                        <option value="Journal">Journal</option>
+                        <option value="custom">Other / Custom...</option>
+                    </select>
+                    
+                    <!-- Custom Product Input -->
+                    <div class="custom-replacement-container hidden mt-1.5">
+                        <input type="text" class="custom-replacement-input w-full px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs focus:outline-none" placeholder="Type custom product name">
+                    </div>
+                </div>
+
+                <!-- Size & Qty Grid -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Qty</label>
+                        <input type="number" class="replacement-qty w-full px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs focus:outline-none" value="1" min="1" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Size</label>
+                        <input type="text" class="replacement-size w-full px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs focus:outline-none" placeholder="e.g. XL" required>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(div);
+
+            // Bind change listener to the newly created dropdown inside ES scope
+            const selectEl = div.querySelector('.replacement-product-select');
+            selectEl.addEventListener('change', (e) => {
+                handleProductChange('replacement', e.target.value, e.target);
+            });
+        }
+
+        function removeReplacementRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.remove();
             }
         }
 
@@ -1420,33 +1072,57 @@
                 if (!productOriginal) productOriginal = "Custom Product";
             }
 
-            // Get replacement product
-            const isProductChanged = document.getElementById('toggle-product-change').checked;
-            let productNew = productOriginal; // Default: same product
-
-            if (isProductChanged) {
-                const newSelect = document.getElementById('product-new-select').value;
-                if (newSelect === 'custom') {
-                    productNew = document.getElementById('product-new-custom').value.trim();
-                    if (!productNew) productNew = "Custom Product";
-                } else if (newSelect) {
-                    productNew = newSelect;
-                }
-            }
-
             const sizeOriginal = document.getElementById('size-original').value.trim().toUpperCase();
-            const sizeNew = document.getElementById('size-new').value.trim().toUpperCase();
             const trackingNum = document.getElementById('tracking-num').value.trim();
             const newTrackingNum = document.getElementById('new-tracking-num').value.trim();
             const status = document.getElementById('status-select').value;
+
+            // Compile replacements array
+            const isProductChanged = document.getElementById('toggle-product-change').checked;
+            let replacements = [];
+
+            if (isProductChanged) {
+                // Harvest data from dynamic rows
+                const rows = document.querySelectorAll('.replacement-row');
+                rows.forEach(row => {
+                    const selectVal = row.querySelector('.replacement-product-select').value;
+                    let productName = selectVal;
+                    if (selectVal === 'custom') {
+                        productName = row.querySelector('.custom-replacement-input').value.trim();
+                        if (!productName) productName = "Custom Product";
+                    }
+
+                    const qty = parseInt(row.querySelector('.replacement-qty').value) || 1;
+                    const size = row.querySelector('.replacement-size').value.trim().toUpperCase();
+
+                    replacements.push({
+                        product: productName,
+                        qty: qty,
+                        size: size
+                    });
+                });
+            } else {
+                // Default: same item, single exchange size
+                const sizeNew = document.getElementById('size-new').value.trim().toUpperCase();
+                replacements.push({
+                    product: productOriginal,
+                    qty: 1,
+                    size: sizeNew
+                });
+            }
+
+            // Ensure we have at least 1 replacement
+            if (replacements.length === 0) {
+                showToast("Please add at least one replacement item", "❌");
+                return;
+            }
             
             const newExchange = {
                 name,
                 orderNum,
                 productOriginal,
                 sizeOriginal,
-                productNew,
-                sizeNew,
+                replacements,
                 trackingNum,
                 newTrackingNum,
                 notes,
@@ -1472,339 +1148,104 @@
                 showToast('✅ Record saved locally!');
             }
             
-            // Reset Form and elements
-            const form = document.getElementById('exchange-form');
-            if (form) form.reset();
+            // Reset Form and dynamic elements
+            document.getElementById('exchange-form').reset();
+            document.getElementById('custom-original-container').classList.add('hidden');
+            document.getElementById('replacement-items-container').innerHTML = '';
+            document.getElementById('product-change-section').classList.add('hidden');
+            document.getElementById('standard-exchange-size-wrapper').classList.remove('hidden');
+            document.getElementById('size-new').setAttribute('required', 'true');
             
-            const coContainer = document.getElementById('custom-original-container');
-            if (coContainer) coContainer.classList.add('hidden');
-            const cnContainer = document.getElementById('custom-new-container');
-            if (cnContainer) cnContainer.classList.add('hidden');
-            const pcSection = document.getElementById('product-change-section');
-            if (pcSection) pcSection.classList.add('hidden');
-            
-            const pocInput = document.getElementById('product-original-custom');
-            if (pocInput) pocInput.removeAttribute('required');
-            const pnsSelect = document.getElementById('product-new-select');
-            if (pnsSelect) pnsSelect.removeAttribute('required');
-            const pncInput = document.getElementById('product-new-custom');
-            if (pncInput) pncInput.removeAttribute('required');
+            // Re-initialize 1 empty replacement row
+            addReplacementRow();
         }
 
-        // Render Operations Data List Table
-        function renderData() {
-            const tbody = document.getElementById('orders-tbody');
-            if (!tbody) return;
-
-            const searchBar = document.getElementById('search-bar');
-            const searchVal = searchBar ? searchBar.value.toLowerCase() : '';
-            
-            let filtered = exchanges;
-            
-            if (currentFilter !== 'all') {
-                filtered = filtered.filter(item => item.status === currentFilter);
+        // Helper to normalize replacements for backward-compatible logs
+        function getNormalizedReplacements(item) {
+            if (item.replacements && item.replacements.length > 0) {
+                return item.replacements;
             }
+            // Fallback for older legacy schema structures
+            const fallbackProd = item.productNew || item.productOriginal || 'Product';
+            const fallbackSize = item.sizeNew || 'N/A';
+            return [
+                { product: fallbackProd, size: fallbackSize, qty: 1 }
+            ];
+        }
+
+        // Toast alert
+        function showToast(message, icon = '✅') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-icon').innerText = icon;
+            document.getElementById('toast-message').innerText = message;
             
-            if (searchVal) {
-                filtered = filtered.filter(item => 
-                    item.name.toLowerCase().includes(searchVal) || 
-                    item.orderNum.toLowerCase().includes(searchVal) ||
-                    (item.productOriginal && item.productOriginal.toLowerCase().includes(searchVal)) ||
-                    (item.productNew && item.productNew.toLowerCase().includes(searchVal)) ||
-                    (item.notes && item.notes.toLowerCase().includes(searchVal)) ||
-                    (item.trackingNum && item.trackingNum.toLowerCase().includes(searchVal)) ||
-                    (item.newTrackingNum && item.newTrackingNum.toLowerCase().includes(searchVal))
-                );
-            }
-
-            updateStats();
-            tbody.innerHTML = '';
-
-            const emptyState = document.getElementById('empty-state');
-            if (filtered.length === 0) {
-                if (emptyState) emptyState.classList.remove('hidden');
-                return;
-            } else {
-                if (emptyState) emptyState.classList.add('hidden');
-            }
-
-            filtered.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-stone-50/50 transition-colors";
-
-                const isDone = item.status === 'done';
-                const statusBadge = isDone 
-                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500"></span>Done Replace
-                       </span>`
-                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100">
-                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500 animate-pulse"></span>Processing
-                       </span>`;
-
-                const origProd = item.productOriginal || item.product || 'Product';
-                const origSize = item.sizeOriginal || 'N/A';
-                const newProd = item.productNew || origProd;
-                const newSize = item.sizeNew || 'N/A';
-
-                const isSameProduct = origProd === newProd;
-
-                let detailColumnMarkup = "";
-                if (isSameProduct) {
-                    detailColumnMarkup = `
-                        <div class="flex flex-col space-y-1">
-                            <span class="text-xs font-semibold text-stone-700">
-                                🏷️ ${escapeHtml(origProd)}
-                            </span>
-                            <div class="flex items-center space-x-2">
-                                <span class="bg-stone-100 text-stone-800 px-2 py-0.5 rounded text-[11px] font-bold border border-stone-200">${escapeHtml(origSize)}</span>
-                                <span class="text-stone-400 font-bold text-xs">➔</span>
-                                <span class="bg-stone-900 text-white px-2 py-0.5 rounded text-[11px] font-bold shadow-sm">${escapeHtml(newSize)}</span>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    detailColumnMarkup = `
-                        <div class="flex flex-col space-y-1">
-                            <div class="flex items-center mb-0.5">
-                                <span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100 uppercase tracking-wider">Product Swap</span>
-                            </div>
-                            <div class="flex flex-col space-y-1">
-                                <span class="text-xs text-stone-500 font-medium bg-stone-100 px-2 py-0.5 rounded border border-stone-200 inline-block truncate max-w-[200px]" title="${escapeHtml(origProd)} (${escapeHtml(origSize)})">
-                                    ${escapeHtml(origProd)} <strong>(${escapeHtml(origSize)})</strong>
-                                </span>
-                                <span class="text-stone-400 font-bold text-[10px] pl-2">➔</span>
-                                <span class="text-xs text-white font-medium bg-stone-800 px-2 py-0.5 rounded shadow-sm inline-block truncate max-w-[200px]" title="${escapeHtml(newProd)} (${escapeHtml(newSize)})">
-                                    ${escapeHtml(newProd)} <strong>(${escapeHtml(newSize)})</strong>
-                                </span>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                tr.innerHTML = `
-                    <td class="px-6 py-4 align-top">
-                        <div class="font-bold text-stone-800">${escapeHtml(item.name)}</div>
-                        <span class="text-[9px] text-stone-400 mt-1.5 block font-medium">Registered: ${item.date}</span>
-                    </td>
-                    <td class="px-4 py-4 align-top">
-                        <input type="text" value="${escapeHtml(item.orderNum)}" 
-                            data-id="${item.id}"
-                            class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 font-bold w-full transition-all order-id-input">
-                    </td>
-                    <td class="px-4 py-4 align-top">
-                        <textarea 
-                            data-id="${item.id}"
-                            placeholder="Click to add note..."
-                            class="w-full bg-amber-50/20 hover:bg-amber-50/50 focus:bg-white text-xs text-stone-700 p-2 rounded-xl border border-dashed border-stone-200 hover:border-amber-300/80 focus:border-amber-400 focus:outline-none transition-all resize-none font-medium placeholder-stone-400/80 notes-textarea"
-                            rows="2"
-                        >${escapeHtml(item.notes || '')}</textarea>
-                    </td>
-                    <td class="px-4 py-4 align-top">
-                        ${detailColumnMarkup}
-                    </td>
-                    <!-- Return Tracking (Customer -> Us) -->
-                    <td class="px-4 py-4 align-top">
-                        <div class="flex items-center space-x-1">
-                            <input type="text" value="${escapeHtml(item.trackingNum || '')}" 
-                                placeholder="Click to add" 
-                                data-id="${item.id}"
-                                data-type="return"
-                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono tracking-input-return">
-                            ${item.trackingNum ? `
-                                <button data-tracking="${escapeHtml(item.trackingNum)}" class="p-1 text-stone-400 hover:text-stone-700 copy-tracking-btn" title="Copy Return Tracking">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
-                                    </svg>
-                                </button>
-                            ` : ''}
-                        </div>
-                    </td>
-                    <!-- Status Badge -->
-                    <td class="px-4 py-4 text-center align-top">
-                        <div class="inline-block cursor-pointer toggle-status-btn" data-id="${item.id}" title="Flip Status">
-                            ${statusBadge}
-                        </div>
-                    </td>
-                    <!-- New Tracking (Us -> Customer) -->
-                    <td class="px-4 py-4 align-top">
-                        <div class="flex items-center space-x-1">
-                            <input type="text" value="${escapeHtml(item.newTrackingNum || '')}" 
-                                placeholder="Click to add" 
-                                data-id="${item.id}"
-                                data-type="new"
-                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono tracking-input-new">
-                            ${item.newTrackingNum ? `
-                                <button data-tracking="${escapeHtml(item.newTrackingNum)}" class="p-1 text-stone-400 hover:text-stone-700 copy-tracking-btn" title="Copy Outgoing Tracking">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
-                                    </svg>
-                                </button>
-                            ` : ''}
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-right align-top">
-                        <div class="flex items-center justify-end space-x-2">
-                            <button onclick="openAiReplyModal('${item.id}')" class="p-1.5 text-amber-600 hover:text-stone-900 rounded-lg hover:bg-amber-100 transition-colors" title="Generate AI Reply (WhatsApp/Email)">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
-                            </button>
-                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition-colors toggle-status-btn-icon" title="Change Status">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
-                                </svg>
-                            </button>
-                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors delete-record-btn" title="Delete Record">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Rebind functional event listeners
-            document.querySelectorAll('.order-id-input').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    updateOrderNum(e.target.dataset.id, e.target.value);
-                });
-            });
-
-            document.querySelectorAll('.notes-textarea').forEach(textarea => {
-                textarea.addEventListener('change', (e) => {
-                    updateNotes(e.target.dataset.id, e.target.value);
-                });
-            });
-
-            document.querySelectorAll('.tracking-input-return').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    updateTracking(e.target.dataset.id, e.target.value, 'return');
-                });
-            });
-
-            document.querySelectorAll('.tracking-input-new').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    updateTracking(e.target.dataset.id, e.target.value, 'new');
-                });
-            });
-
-            document.querySelectorAll('.copy-tracking-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const tracking = e.currentTarget.dataset.tracking;
-                    copyToClipboard(tracking);
-                });
-            });
-
-            document.querySelectorAll('.toggle-status-btn, .toggle-status-btn-icon').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    toggleStatus(e.currentTarget.dataset.id);
-                });
-            });
-
-            document.querySelectorAll('.delete-record-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    deleteRecord(e.currentTarget.dataset.id);
-                });
-            });
-        }
-
-        function updateStats() {
-            const total = exchanges.length;
-            const processing = exchanges.filter(item => item.status === 'processing').length;
-            const done = exchanges.filter(item => item.status === 'done').length;
-
-            const totalEl = document.getElementById('stat-total');
-            const processingEl = document.getElementById('stat-processing');
-            const doneEl = document.getElementById('stat-done');
-
-            if (totalEl) totalEl.innerText = total;
-            if (processingEl) processingEl.innerText = processing;
-            if (doneEl) doneEl.innerText = done;
-        }
-
-        function setStatusFilter(filter) {
-            currentFilter = filter;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
             
-            const buttons = {
-                all: document.getElementById('btn-filter-all'),
-                processing: document.getElementById('btn-filter-processing'),
-                done: document.getElementById('btn-filter-done')
-            };
-
-            Object.keys(buttons).forEach(key => {
-                const btn = buttons[key];
-                if (!btn) return;
-                if (key === filter) {
-                    btn.className = "px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm";
-                } else {
-                    btn.className = "px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800";
-                }
-            });
-
-            renderData();
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
         }
 
-        function filterData() {
-            renderData();
+        // Custom Confirm Modals
+        function showConfirmModal(message, isAll = false, id = null) {
+            pendingDeleteId = id;
+            isDeleteAll = isAll;
+            
+            document.getElementById('confirm-message').innerText = message;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
         }
 
-        async function toggleStatus(id) {
-            const target = exchanges.find(item => item.id === id);
-            if (!target) return;
+        function hideConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                pendingDeleteId = null;
+                isDeleteAll = false;
+            }, 200);
+        }
 
-            const nextStatus = target.status === 'done' ? 'processing' : 'done';
-            const msg = nextStatus === 'done' ? 'Fulfillment Swap Completed! ✅' : 'Moved back to Processing 🔄';
-
-            if (usingCloud) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
-                    await updateDoc(docRef, { status: nextStatus });
-                    showToast(msg);
-                } catch (e) {
-                    showToast('Failed updating status', '❌');
-                }
-            } else {
-                exchanges = exchanges.map(item => {
-                    if (item.id === id) {
-                        return { ...item, status: nextStatus };
+        async function executeConfirmedAction() {
+            if (isDeleteAll) {
+                if (usingCloud) {
+                    try {
+                        for (let item of exchanges) {
+                            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', item.id));
+                        }
+                        showToast('All Cloud data deleted.', '🧹');
+                    } catch (e) {
+                        showToast('Error deleting Cloud data', '❌');
                     }
-                    return item;
-                });
-                saveToLocalStorage();
-                renderData();
-                showToast(msg);
-            }
-        }
-
-        async function updateTracking(id, value, type) {
-            const updateField = type === 'return' ? 'trackingNum' : 'newTrackingNum';
-            const msg = type === 'return' ? 'Incoming tracking ID saved!' : 'Outgoing waybill tracking ID saved!';
-
-            if (usingCloud) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
-                    const updateObj = {};
-                    updateObj[updateField] = value.trim();
-                    await updateDoc(docRef, updateObj);
-                    showToast(msg, '📦');
-                } catch (e) {
-                    showToast('Error updating tracking info', '❌');
+                } else {
+                    exchanges = [];
+                    saveToLocalStorage();
+                    renderData();
+                    showToast('All Local data cleared.', '🧹');
                 }
-            } else {
-                exchanges = exchanges.map(item => {
-                    if (item.id === id) {
-                        const updatedItem = { ...item };
-                        updatedItem[updateField] = value.trim();
-                        return updatedItem;
+            } else if (pendingDeleteId) {
+                if (usingCloud) {
+                    try {
+                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', pendingDeleteId));
+                        showToast('Cloud record deleted.', '🗑️');
+                    } catch (e) {
+                        showToast('Error deleting record', '❌');
                     }
-                    return item;
-                });
-                saveToLocalStorage();
-                renderData();
-                showToast(msg, '📦');
+                } else {
+                    exchanges = exchanges.filter(item => item.id !== pendingDeleteId);
+                    saveToLocalStorage();
+                    renderData();
+                    showToast('Record deleted.', '🗑️');
+                }
             }
+            hideConfirmModal();
         }
 
         // Live update notes from table
@@ -1853,118 +1294,356 @@
             }
         }
 
+        // Table Render Logic
+        function renderData() {
+            const tbody = document.getElementById('orders-tbody');
+            const searchVal = document.getElementById('search-bar').value.toLowerCase();
+            
+            let filtered = exchanges;
+            
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(item => item.status === currentFilter);
+            }
+            
+            if (searchVal) {
+                filtered = filtered.filter(item => 
+                    item.name.toLowerCase().includes(searchVal) || 
+                    item.orderNum.toLowerCase().includes(searchVal) ||
+                    (item.productOriginal && item.productOriginal.toLowerCase().includes(searchVal)) ||
+                    (item.notes && item.notes.toLowerCase().includes(searchVal)) ||
+                    (item.trackingNum && item.trackingNum.toLowerCase().includes(searchVal)) ||
+                    (item.newTrackingNum && item.newTrackingNum.toLowerCase().includes(searchVal))
+                );
+            }
+
+            updateStats();
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('empty-state').classList.add('hidden');
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-stone-50/50 transition-colors";
+
+                const isDone = item.status === 'done';
+                const statusBadge = isDone 
+                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500"></span>Done Replace
+                       </span>`
+                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100">
+                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500 animate-pulse"></span>Processing
+                       </span>`;
+
+                const origProd = item.productOriginal || 'Product';
+                const origSize = item.sizeOriginal || 'N/A';
+
+                // Render Multi-Item Replacements list dynamically inside the column cell
+                const replacementsList = getNormalizedReplacements(item);
+                
+                let detailsMarkup = `
+                    <div class="flex flex-col space-y-1.5">
+                        <div class="bg-stone-100 text-stone-600 px-2.5 py-1.5 rounded-lg border border-stone-200">
+                            <span class="text-[9px] font-bold uppercase tracking-wider block text-stone-400 mb-0.5">Customer Returned:</span>
+                            <span class="text-xs font-bold text-stone-700">${escapeHtml(origProd)}</span>
+                            <span class="inline-block bg-stone-200 text-stone-800 text-[10px] font-extrabold px-1.5 py-0.2 rounded ml-1.5">${escapeHtml(origSize)}</span>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider block">Fulfillment Swaps:</span>
+                            <div class="space-y-1">
+                `;
+
+                replacementsList.forEach(rep => {
+                    const sameProduct = rep.product === origProd;
+                    const badgeClass = sameProduct ? 'bg-stone-900 text-white' : 'bg-amber-100 border border-amber-200 text-amber-900';
+                    const badgePrefix = sameProduct ? '🔄 Size Swap' : '✨ Different Product';
+                    
+                    detailsMarkup += `
+                        <div class="flex items-center justify-between bg-white border border-stone-200 p-1.5 rounded-lg shadow-sm text-xs">
+                            <div class="flex flex-col">
+                                <span class="text-[8px] font-extrabold uppercase ${sameProduct ? 'text-stone-400' : 'text-amber-600'}">${badgePrefix} (x${rep.qty || 1})</span>
+                                <span class="font-semibold text-stone-800 truncate max-w-[150px]" title="${escapeHtml(rep.product)}">${escapeHtml(rep.product)}</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold ${badgeClass}">${escapeHtml(rep.size)}</span>
+                        </div>
+                    `;
+                });
+
+                detailsMarkup += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 align-top">
+                        <div class="font-bold text-stone-800">${escapeHtml(item.name)}</div>
+                        <span class="text-[9px] text-stone-400 mt-1.5 block font-medium">Registered: ${item.date}</span>
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        <input type="text" value="${escapeHtml(item.orderNum)}" 
+                            data-id="${item.id}"
+                            class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 font-bold w-full transition-all order-id-input">
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        <textarea 
+                            data-id="${item.id}"
+                            placeholder="Click to add note..."
+                            class="w-full bg-amber-50/20 hover:bg-amber-50/50 focus:bg-white text-xs text-stone-700 p-2 rounded-xl border border-dashed border-stone-200 hover:border-amber-300/80 focus:border-amber-400 focus:outline-none transition-all resize-none font-medium placeholder-stone-400/80 notes-textarea"
+                            rows="2"
+                        >${escapeHtml(item.notes || '')}</textarea>
+                    </td>
+                    <td class="px-4 py-4 align-top">
+                        ${detailsMarkup}
+                    </td>
+                    <!-- Return Tracking (Customer -> Us) -->
+                    <td class="px-4 py-4 align-top">
+                        <div class="flex items-center space-x-1">
+                            <input type="text" value="${escapeHtml(item.trackingNum || '')}" 
+                                placeholder="Click to add" 
+                                data-id="${item.id}"
+                                data-type="return"
+                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono tracking-input-return">
+                            ${item.trackingNum ? `
+                                <button data-tracking="${escapeHtml(item.trackingNum)}" class="p-1 text-stone-400 hover:text-stone-700 copy-tracking-btn" title="Copy Return Tracking">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
+                                    </svg>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                    <!-- Status Badge -->
+                    <td class="px-4 py-4 text-center align-top">
+                        <div class="inline-block cursor-pointer toggle-status-btn" data-id="${item.id}" title="Click to swap status">
+                            ${statusBadge}
+                        </div>
+                    </td>
+                    <!-- New Tracking (Us -> Customer) -->
+                    <td class="px-4 py-4 align-top">
+                        <div class="flex items-center space-x-1">
+                            <input type="text" value="${escapeHtml(item.newTrackingNum || '')}" 
+                                placeholder="Click to add" 
+                                data-id="${item.id}"
+                                data-type="new"
+                                class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 w-28 transition-all font-mono tracking-input-new">
+                            ${item.newTrackingNum ? `
+                                <button data-tracking="${escapeHtml(item.newTrackingNum)}" class="p-1 text-stone-400 hover:text-stone-700 copy-tracking-btn" title="Copy Outgoing Tracking">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10h6m-3-3h3m-3 6h3" />
+                                    </svg>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-right align-top">
+                        <div class="flex items-center justify-end space-x-2">
+                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition-colors toggle-status-btn-icon" title="Change Status">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+                                </svg>
+                            </button>
+                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors delete-record-btn" title="Delete Record">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Rebind DOM event listeners
+            document.querySelectorAll('.order-id-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    updateOrderNum(e.target.dataset.id, e.target.value);
+                });
+            });
+
+            document.querySelectorAll('.notes-textarea').forEach(textarea => {
+                textarea.addEventListener('change', (e) => {
+                    updateNotes(e.target.dataset.id, e.target.value);
+                });
+            });
+
+            document.querySelectorAll('.tracking-input-return').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    updateTracking(e.target.dataset.id, e.target.value, 'return');
+                });
+            });
+
+            document.querySelectorAll('.tracking-input-new').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    updateTracking(e.target.dataset.id, e.target.value, 'new');
+                });
+            });
+
+            document.querySelectorAll('.copy-tracking-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tracking = e.currentTarget.dataset.tracking;
+                    copyToClipboard(tracking);
+                });
+            });
+
+            document.querySelectorAll('.toggle-status-btn, .toggle-status-btn-icon').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    toggleStatus(e.currentTarget.dataset.id);
+                });
+            });
+
+            document.querySelectorAll('.delete-record-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    deleteRecord(e.currentTarget.dataset.id);
+                });
+            });
+        }
+
+        // Stats summary calculation
+        function updateStats() {
+            const total = exchanges.length;
+            const processing = exchanges.filter(item => item.status === 'processing').length;
+            const done = exchanges.filter(item => item.status === 'done').length;
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-processing').innerText = processing;
+            document.getElementById('stat-done').innerText = done;
+        }
+
+        // Status Tabs Filtering
+        function setStatusFilter(filter) {
+            currentFilter = filter;
+            
+            const buttons = {
+                all: document.getElementById('btn-filter-all'),
+                processing: document.getElementById('btn-filter-processing'),
+                done: document.getElementById('btn-filter-done')
+            };
+
+            Object.keys(buttons).forEach(key => {
+                if (key === filter) {
+                    buttons[key].className = "px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm";
+                } else {
+                    buttons[key].className = "px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800";
+                }
+            });
+
+            renderData();
+        }
+
+        function filterData() {
+            renderData();
+        }
+
+        // Fast status flip
+        async function toggleStatus(id) {
+            const target = exchanges.find(item => item.id === id);
+            if (!target) return;
+
+            const nextStatus = target.status === 'done' ? 'processing' : 'done';
+            const msg = nextStatus === 'done' ? 'Successfully replaced! ✅' : 'Changed to Processing 🔄';
+
+            if (usingCloud) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
+                    await updateDoc(docRef, { status: nextStatus });
+                    showToast(msg);
+                } catch (e) {
+                    showToast('Error updating status', '❌');
+                }
+            } else {
+                exchanges = exchanges.map(item => {
+                    if (item.id === id) {
+                        return { ...item, status: nextStatus };
+                    }
+                    return item;
+                });
+                saveToLocalStorage();
+                renderData();
+                showToast(msg);
+            }
+        }
+
+        // Fast Tracking Update for both Return and New Postage Out Tracking
+        async function updateTracking(id, value, type) {
+            const updateField = type === 'return' ? 'trackingNum' : 'newTrackingNum';
+            const msg = type === 'return' ? 'Return tracking updated!' : 'New outgoing tracking updated!';
+
+            if (usingCloud) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
+                    const updateObj = {};
+                    updateObj[updateField] = value.trim();
+                    await updateDoc(docRef, updateObj);
+                    showToast(msg, '📦');
+                } catch (e) {
+                    showToast('Error updating tracking number', '❌');
+                }
+            } else {
+                exchanges = exchanges.map(item => {
+                    if (item.id === id) {
+                        const updatedItem = { ...item };
+                        updatedItem[updateField] = value.trim();
+                        return updatedItem;
+                    }
+                    return item;
+                });
+                saveToLocalStorage();
+                renderData();
+                showToast(msg, '📦');
+            }
+        }
+
+        // Copy tracking
+        function copyToClipboard(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast('Tracking number copied to clipboard!', '📋');
+        }
+
+        // Delete handlers
         function deleteRecord(id) {
             const target = exchanges.find(item => item.id === id);
             if (!target) return;
-            showConfirmModal(`Are you absolutely sure you want to delete the record for "${target.name}"?`, false, id);
+            showConfirmModal(`Are you sure you want to delete the record for "${target.name}"?`, false, id);
         }
 
-        function clearAllData() {
-            showConfirmModal('ALERT: This will permanently wipe out all registered logs from memory!', true);
-        }
-
-        function showConfirmModal(message, isAll = false, id = null) {
-            pendingDeleteId = id;
-            isDeleteAll = isAll;
-            
-            const msgEl = document.getElementById('confirm-message');
-            if (msgEl) msgEl.innerText = message;
-
-            const modal = document.getElementById('confirm-modal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    const innerDiv = modal.querySelector('div');
-                    if (innerDiv) innerDiv.classList.remove('scale-95');
-                }, 10);
-            }
-        }
-
-        function hideConfirmModal() {
-            const modal = document.getElementById('confirm-modal');
-            if (modal) {
-                modal.classList.add('opacity-0');
-                const innerDiv = modal.querySelector('div');
-                if (innerDiv) innerDiv.classList.add('scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    pendingDeleteId = null;
-                    isDeleteAll = false;
-                }, 200);
-            }
-        }
-
-        async function executeConfirmedAction() {
-            if (isDeleteAll) {
-                if (usingCloud) {
-                    try {
-                        for (let item of exchanges) {
-                            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', item.id));
-                        }
-                        showToast('All database logs cleared from cloud.', '🧹');
-                    } catch (e) {
-                        showToast('Error deleting cloud logs', '❌');
-                    }
-                } else {
-                    exchanges = [];
-                    saveToLocalStorage();
-                    renderData();
-                    showToast('Local database logs cleared.', '🧹');
-                }
-            } else if (pendingDeleteId) {
-                if (usingCloud) {
-                    try {
-                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', pendingDeleteId));
-                        showToast('Log successfully deleted from cloud.', '🗑️');
-                    } catch (e) {
-                        showToast('Error deleting cloud record', '❌');
-                    }
-                } else {
-                    exchanges = exchanges.filter(item => item.id !== pendingDeleteId);
-                    saveToLocalStorage();
-                    renderData();
-                    showToast('Record deleted.', '🗑️');
-                }
-            }
-            hideConfirmModal();
-        }
-
-        // Sidebar slide out
+        // Slide / Toggle Sidebar Logic
         function toggleSidebar(show) {
             const sidebar = document.getElementById('sidebar-panel');
             const openBtn = document.getElementById('sidebar-toggle-open');
             
-            if (!sidebar) return;
-
             if (show) {
                 sidebar.classList.remove('hidden', 'xl:w-0', 'opacity-0');
                 sidebar.classList.add('w-full', 'xl:w-96', 'opacity-100');
-                if (openBtn) openBtn.classList.add('hidden');
+                openBtn.classList.add('hidden');
                 localStorage.setItem('nostalgya_sidebar_state', 'expanded');
             } else {
                 sidebar.classList.add('hidden', 'xl:w-0', 'opacity-0');
                 sidebar.classList.remove('w-full', 'xl:w-96', 'opacity-100');
-                if (openBtn) openBtn.classList.remove('hidden');
+                openBtn.classList.remove('hidden');
                 localStorage.setItem('nostalgya_sidebar_state', 'collapsed');
             }
         }
 
+        // Custom Firebase Config Panel Actions
         function toggleFirebaseSettings() {
             const panel = document.getElementById('firebase-settings-panel');
-            if (panel) panel.classList.toggle('hidden');
+            panel.classList.toggle('hidden');
         }
 
         function saveFirebaseConfig() {
             const configText = document.getElementById('firebase-config-input').value.trim();
-            const geminiKey = document.getElementById('gemini-key-input').value.trim();
-
-            // Save key to Local Storage
-            localStorage.setItem('nostalgya_gemini_key', geminiKey);
-
             if (!configText) {
-                showToast('API Keys updated successfully!', '⚙️');
-                toggleFirebaseSettings();
+                showToast('Please enter a valid Firebase JSON configuration.', '❌');
                 return;
             }
 
@@ -1986,13 +1665,7 @@
 
         function resetToLocal() {
             localStorage.removeItem('nostalgya_custom_firebase_config');
-            localStorage.removeItem('nostalgya_gemini_key');
-            
-            const input = document.getElementById('firebase-config-input');
-            if (input) input.value = '';
-            const keyInput = document.getElementById('gemini-key-input');
-            if (keyInput) keyInput.value = '';
-
+            document.getElementById('firebase-config-input').value = '';
             showToast('Reverted to Local Storage.', '🧹');
             toggleFirebaseSettings();
             
@@ -2004,35 +1677,11 @@
             fallbackToLocalStorage();
         }
 
-        function copyToClipboard(text) {
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            showToast('Copied to clipboard!', '📋');
+        function clearAllData() {
+            showConfirmModal('WARNING: This will permanently delete all records from storage!', true);
         }
 
-        function showToast(message, icon = '✅') {
-            const toast = document.getElementById('toast');
-            const tIcon = document.getElementById('toast-icon');
-            const tMsg = document.getElementById('toast-message');
-            
-            if (tIcon) tIcon.innerText = icon;
-            if (tMsg) tMsg.innerText = message;
-            
-            if (toast) {
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                toast.classList.add('translate-y-0', 'opacity-100');
-                
-                setTimeout(() => {
-                    toast.classList.remove('translate-y-0', 'opacity-100');
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 3000);
-            }
-        }
-
+        // XSS Prevention
         function escapeHtml(text) {
             if (!text) return '';
             return text
@@ -2042,6 +1691,28 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        // Expose functions globally to be used by elements outside modular scope
+        window.handleProductChange = handleProductChange;
+        window.toggleProductChangeSection = toggleProductChangeSection;
+        window.addReplacementRow = addReplacementRow;
+        window.removeReplacementRow = removeReplacementRow;
+        window.handleFormSubmit = handleFormSubmit;
+        window.setStatusFilter = setStatusFilter;
+        window.filterData = filterData;
+        window.toggleStatus = toggleStatus;
+        window.updateTracking = updateTracking;
+        window.copyToClipboard = copyToClipboard;
+        window.deleteRecord = deleteRecord;
+        window.clearAllData = clearAllData;
+        window.updateNotes = updateNotes;
+        window.updateOrderNum = updateOrderNum;
+        window.toggleFirebaseSettings = toggleFirebaseSettings;
+        window.saveFirebaseConfig = saveFirebaseConfig;
+        window.resetToLocal = resetToLocal;
+        window.toggleSidebar = toggleSidebar;
+        window.switchTab = switchTab;
+
     </script>
 </body>
 </html>
