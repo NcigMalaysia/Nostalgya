@@ -136,8 +136,8 @@
                             <h2 class="text-lg font-bold text-stone-800">Add Record</h2>
                         </div>
                         
-                        <!-- Settings Icon for Firebase Setup -->
-                        <button onclick="toggleFirebaseSettings()" class="p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Configure Cloud Database">
+                        <!-- Secure Google Sheets access settings -->
+                        <button onclick="toggleAccessSettings()" class="p-2 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-50 transition-colors" title="Google Sheets Admin Access">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -145,17 +145,17 @@
                         </button>
                     </div>
 
-                    <!-- CLOUD CONFIG PANEL (Hidden by Default) -->
-                    <div id="firebase-settings-panel" class="hidden mb-6 p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs space-y-3">
+                    <!-- GOOGLE SHEETS ACCESS PANEL (Hidden by Default) -->
+                    <div id="access-settings-panel" class="hidden mb-6 p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-stone-700">Firebase Cloud Settings</span>
-                            <button type="button" onclick="toggleFirebaseSettings()" class="text-stone-400 hover:text-stone-600">Close</button>
+                            <span class="font-bold text-stone-700">Google Sheets Admin Access</span>
+                            <button type="button" onclick="toggleAccessSettings()" class="text-stone-400 hover:text-stone-600">Close</button>
                         </div>
-                        <p class="text-stone-500 leading-relaxed">Paste your <strong>Firebase Config</strong> object below to enable live shared database synchronization with your operations team.</p>
-                        <textarea id="firebase-config-input" rows="4" placeholder='{"apiKey": "...", "projectId": "...", ...}' class="w-full p-2 border border-stone-200 rounded-lg focus:outline-none font-mono text-[10px]"></textarea>
+                        <p class="text-stone-500 leading-relaxed">Enter the <strong>Admin Access Key</strong> from the Google Sheet <strong>Settings</strong> tab. The key is kept only for this browser session.</p>
+                        <input id="admin-access-key" type="password" autocomplete="off" placeholder="Admin Access Key" class="w-full p-2 border border-stone-200 rounded-lg focus:outline-none font-mono text-[11px]">
                         <div class="flex space-x-2">
-                            <button type="button" onclick="saveFirebaseConfig()" class="flex-1 bg-stone-900 text-white font-medium py-1.5 rounded-lg hover:bg-stone-800 transition-colors">Connect</button>
-                            <button type="button" onclick="resetToLocal()" class="flex-1 bg-stone-200 text-stone-700 font-medium py-1.5 rounded-lg hover:bg-stone-300 transition-colors">Use Local</button>
+                            <button type="button" onclick="saveAdminAccess()" class="flex-1 bg-stone-900 text-white font-medium py-1.5 rounded-lg hover:bg-stone-800 transition-colors">Connect</button>
+                            <button type="button" onclick="disconnectAdminAccess()" class="flex-1 bg-stone-200 text-stone-700 font-medium py-1.5 rounded-lg hover:bg-stone-300 transition-colors">Disconnect</button>
                         </div>
                     </div>
                     
@@ -458,97 +458,8 @@
         <span id="toast-message">Record saved successfully!</span>
     </div>
 
-    <!-- FIREBASE AND SYSTEM LOGIC (Using Modular ES Script) -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
-        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
-
-        // Pre-populated active database matching original screenshots, with backwards-compatible structures
-        const initialMockData = [
-            {
-                id: '1779689338624',
-                name: 'Muhammad Amirul Azuar',
-                orderNum: '#NO1059',
-                productOriginal: 'studio trousers',
-                sizeOriginal: 'XL',
-                replacements: [
-                    { product: 'studio trousers', size: 'XXL', qty: 1 }
-                ],
-                trackingNum: '7227052991944216',
-                newTrackingNum: '',
-                notes: 'WAITING FOR CUSTOMER RETURN',
-                status: 'done',
-                date: '2026-05-25',
-                createdAt: 1779689338624
-            },
-            {
-                id: '1779688817634',
-                name: 'Hj Rizal Ibrahim',
-                orderNum: '#NO1056',
-                productOriginal: 'studio trousers',
-                sizeOriginal: 'XXL',
-                replacements: [
-                    { product: 'studio trousers', size: 'L', qty: 1 }
-                ],
-                trackingNum: '7227052991947916',
-                newTrackingNum: '',
-                notes: 'WAITING FOR CUSTOMER RETURN',
-                status: 'processing',
-                date: '2026-05-25',
-                createdAt: 1779688817634
-            },
-            {
-                id: '1779688491670',
-                name: 'Jay Seaw',
-                orderNum: '#NO1050',
-                productOriginal: 'Overlay Tee',
-                sizeOriginal: 'L',
-                replacements: [
-                    { product: 'Overlay Tee', size: 'M', qty: 1 },
-                    { product: 'Slim Fit Tee', size: 'L', qty: 1 } // Example of multi-item exchange
-                ],
-                trackingNum: '7228052991953116',
-                newTrackingNum: '',
-                notes: 'CUSTOMER WANTS TO ADD A SLIM FIT TEE AS PART OF EXCHANGE LIST',
-                status: 'processing',
-                date: '2026-05-25',
-                createdAt: 1779688491670
-            },
-            {
-                id: '1779685523376',
-                name: 'Muhammad Naeem Zaidi',
-                orderNum: '#NO1067',
-                productOriginal: 'Black Jacket',
-                sizeOriginal: '2XL',
-                replacements: [
-                    { product: 'Black Jacket', size: 'XL', qty: 1 }
-                ],
-                trackingNum: '7228051638430626',
-                newTrackingNum: '',
-                notes: 'WAITING FOR CUSTOMER RETURN',
-                status: 'processing',
-                date: '2026-05-25',
-                createdAt: 1779685523376
-            },
-            {
-                id: '1779685214528',
-                name: 'AHMAD AZRAF AZMAN',
-                orderNum: '#NO1036',
-                productOriginal: 'Vintage Tee',
-                sizeOriginal: 'XL',
-                replacements: [
-                    { product: 'Slim Fit Tee', size: 'XL', qty: 1 }
-                ],
-                trackingNum: '7227058243241456',
-                newTrackingNum: '',
-                notes: 'CUSTOMER EXCHANGED BY LALAMOVE DAMANSARA',
-                status: 'done',
-                date: '2026-05-25',
-                createdAt: 1779685214528
-            }
-        ];
-
+    <!-- GOOGLE SHEETS SYSTEM LOGIC -->
+    <script>
         let exchanges = [];
         let currentFilter = 'all';
         let pendingDeleteId = null;
@@ -560,12 +471,10 @@
         let productChartInstance = null;
         let sizeChartInstance = null;
 
-        // Cloud integration states
-        let db = null;
-        let auth = null;
+        // Google Sheets integration
+        const GOOGLE_SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbz3GcwoYqDcN1bZg4vckydZtc3rgokpRDRCIn2AAPtmDSn8XBfbD0awfGlueDzJdKdRvg/exec';
+        let adminAccessKey = sessionStorage.getItem('nostalgya_admin_access_key') || '';
         let usingCloud = false;
-        let unsubscribeExchanges = null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'nostalgya-tracking';
 
         // On window load
         window.onload = function() {
@@ -587,81 +496,56 @@
             addReplacementRow();
         };
 
-        // Firebase Setup & Initialization Flow
+        // Google Sheets API setup
         async function setupSystem() {
-            let firebaseConfig = {
-                apiKey: "AIzaSyDtR9_Tj3XasUPvPkqIvZWdXwqn254Dyzc",
-                authDomain: "nostalgya-tracking.firebaseapp.com",
-                projectId: "nostalgya-tracking",
-                storageBucket: "nostalgya-tracking.firebasestorage.app",
-                messagingSenderId: "926756039356",
-                appId: "1:926756039356:web:84639463018dff0cedbeb9"
-            };
-
-            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                try {
-                    firebaseConfig = JSON.parse(__firebase_config);
-                } catch (e) {
-                    console.error("Platform config error:", e);
-                }
-            } 
-            
-            if (!firebaseConfig) {
-                const customSaved = localStorage.getItem('nostalgya_custom_firebase_config');
-                if (customSaved) {
-                    try {
-                        firebaseConfig = JSON.parse(customSaved);
-                        document.getElementById('firebase-config-input').value = customSaved;
-                    } catch (e) {
-                        console.error("Saved custom config error:", e);
-                    }
-                }
+            if (!adminAccessKey) {
+                updateConnectionStatus('locked', 'Admin Access Required');
+                document.getElementById('access-settings-panel').classList.remove('hidden');
+                renderData();
+                return;
             }
 
-            if (firebaseConfig) {
-                updateConnectionStatus('connecting', 'Connecting to Cloud...');
-                try {
-                    const app = initializeApp(firebaseConfig);
-                    auth = getAuth(app);
-                    db = getFirestore(app);
-
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-
-                    onAuthStateChanged(auth, (user) => {
-                        if (user) {
-                            usingCloud = true;
-                            updateConnectionStatus('cloud', '🟢 Cloud Mode (Live Shared Sync)');
-                            listenToCloudExchanges();
-                        } else {
-                            fallbackToLocalStorage();
-                        }
-                    });
-
-                } catch (err) {
-                    console.error("Firebase connection failed. Falling back to LocalStorage.", err);
-                    fallbackToLocalStorage('🔴 Connection Failed (Local Mode)');
-                }
-            } else {
-                fallbackToLocalStorage('🟡 Local Mode (Click ⚙️ to Connect Cloud)');
+            updateConnectionStatus('connecting', 'Connecting to Google Sheets...');
+            try {
+                await apiRequest('list');
+                updateConnectionStatus('cloud', 'Google Sheets Connected');
+            } catch (error) {
+                console.error('Google Sheets connection failed:', error);
+                usingCloud = false;
+                exchanges = [];
+                renderData();
+                updateConnectionStatus('error', 'Connection Failed');
+                document.getElementById('access-settings-panel').classList.remove('hidden');
+                showToast(error.message || 'Unable to connect to Google Sheets.', '❌');
             }
         }
 
-        function fallbackToLocalStorage(statusText = '🟡 Local Mode') {
-            usingCloud = false;
-            updateConnectionStatus('local', statusText);
-            
-            const savedData = localStorage.getItem('nostalgya_exchanges_v4');
-            if (savedData) {
-                exchanges = JSON.parse(savedData);
-            } else {
-                exchanges = initialMockData;
-                saveToLocalStorage();
+        async function apiRequest(action, payload = {}) {
+            if (!adminAccessKey) {
+                throw new Error('Admin Access Key is required.');
             }
-            renderData();
+
+            const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action, token: adminAccessKey, ...payload })
+            });
+
+            if (!response.ok) {
+                throw new Error('Google Sheets API returned HTTP ' + response.status + '.');
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || 'Google Sheets request failed.');
+            }
+
+            usingCloud = true;
+            if (Array.isArray(result.exchanges)) {
+                exchanges = result.exchanges;
+                renderData();
+            }
+            return result;
         }
 
         function updateConnectionStatus(type, text) {
@@ -670,9 +554,8 @@
             const label = document.getElementById('connection-text');
 
             label.innerText = text;
-
-            badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ";
-            dot.className = "w-2 h-2 mr-2 rounded-full ";
+            badge.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ';
+            dot.className = 'w-2 h-2 mr-2 rounded-full ';
 
             if (type === 'connecting') {
                 badge.classList.add('bg-stone-100', 'text-stone-700', 'border-stone-200');
@@ -681,54 +564,11 @@
                 badge.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-100');
                 dot.classList.add('bg-emerald-500');
             } else {
-                badge.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-100');
-                dot.classList.add('bg-amber-500');
+                badge.classList.add('bg-red-50', 'text-red-800', 'border-red-100');
+                dot.classList.add('bg-red-500');
             }
         }
 
-        // Firestore real-time listener (Rules 1 & 2)
-        function listenToCloudExchanges() {
-            if (unsubscribeExchanges) unsubscribeExchanges();
-
-            const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'exchanges');
-
-            unsubscribeExchanges = onSnapshot(collectionRef, (snapshot) => {
-                const list = [];
-                snapshot.forEach((doc) => {
-                    list.push({
-                        ...doc.data(),
-                        id: doc.id
-                    });
-                });
-
-                list.sort((a, b) => {
-                    const timeA = a.createdAt || 0;
-                    const timeB = b.createdAt || 0;
-                    return timeB - timeA;
-                });
-
-                if (list.length === 0 && exchanges.length === 0) {
-                    initialMockData.forEach(async (mockItem) => {
-                        try {
-                            await addDoc(collectionRef, mockItem);
-                        } catch (e) {
-                            console.error("Error seeding initial data: ", e);
-                        }
-                    });
-                } else {
-                    exchanges = list;
-                    renderData();
-                }
-            }, (error) => {
-                console.error("Firestore loading error: ", error);
-                showToast("Failed to load cloud data. Reverting to Local Storage.", "⚠️");
-                fallbackToLocalStorage('🔴 Cloud Error (Local Mode)');
-            });
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('nostalgya_exchanges_v4', JSON.stringify(exchanges));
-        }
 
         // Switch between tabs
         function switchTab(tabName) {
@@ -1139,21 +979,20 @@
                 createdAt: Date.now()
             };
 
-            if (usingCloud) {
-                try {
-                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'exchanges');
-                    await addDoc(collectionRef, newExchange);
-                    showToast('✅ Record successfully saved to Cloud!');
-                } catch (error) {
-                    console.error("Cloud save error:", error);
-                    showToast('🔴 Failed to save to Cloud.', '❌');
-                }
-            } else {
+            if (!adminAccessKey) {
+                showToast('Admin Access Key is required.', '🔒');
+                document.getElementById('access-settings-panel').classList.remove('hidden');
+                return;
+            }
+
+            try {
                 newExchange.id = Date.now().toString();
-                exchanges.unshift(newExchange);
-                saveToLocalStorage();
-                renderData();
-                showToast('✅ Record saved locally!');
+                await apiRequest('add', { record: newExchange });
+                showToast('Record successfully saved to Google Sheets!', '✅');
+            } catch (error) {
+                console.error('Save error:', error);
+                showToast(error.message || 'Unable to save record.', '❌');
+                return;
             }
             
             // Reset Form and dynamic elements
@@ -1222,83 +1061,39 @@
         }
 
         async function executeConfirmedAction() {
-            if (isDeleteAll) {
-                if (usingCloud) {
-                    try {
-                        for (let item of exchanges) {
-                            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', item.id));
-                        }
-                        showToast('All Cloud data deleted.', '🧹');
-                    } catch (e) {
-                        showToast('Error deleting Cloud data', '❌');
-                    }
-                } else {
-                    exchanges = [];
-                    saveToLocalStorage();
-                    renderData();
-                    showToast('All Local data cleared.', '🧹');
+            try {
+                if (isDeleteAll) {
+                    await apiRequest('clearAll');
+                    showToast('All Google Sheets records deleted.', '🧹');
+                } else if (pendingDeleteId) {
+                    await apiRequest('delete', { id: pendingDeleteId });
+                    showToast('Record deleted from Google Sheets.', '🗑️');
                 }
-            } else if (pendingDeleteId) {
-                if (usingCloud) {
-                    try {
-                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', pendingDeleteId));
-                        showToast('Cloud record deleted.', '🗑️');
-                    } catch (e) {
-                        showToast('Error deleting record', '❌');
-                    }
-                } else {
-                    exchanges = exchanges.filter(item => item.id !== pendingDeleteId);
-                    saveToLocalStorage();
-                    renderData();
-                    showToast('Record deleted.', '🗑️');
-                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast(error.message || 'Unable to delete record.', '❌');
+            } finally {
+                hideConfirmModal();
             }
-            hideConfirmModal();
         }
 
         // Live update notes from table
         async function updateNotes(id, value) {
-            if (usingCloud) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
-                    await updateDoc(docRef, { notes: value.trim() });
-                    showToast('Notes updated!', '📝');
-                } catch (e) {
-                    showToast('Error updating notes', '❌');
-                }
-            } else {
-                exchanges = exchanges.map(item => {
-                    if (item.id === id) {
-                        return { ...item, notes: value.trim() };
-                    }
-                    return item;
-                });
-                saveToLocalStorage();
-                renderData();
+            try {
+                await apiRequest('update', { id, updates: { notes: value.trim() } });
                 showToast('Notes updated!', '📝');
+            } catch (error) {
+                showToast(error.message || 'Error updating notes', '❌');
             }
         }
 
         // Live update order number from table
         async function updateOrderNum(id, value) {
-            if (usingCloud) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
-                    await updateDoc(docRef, { orderNum: value.trim() });
-                    showToast('Order ID updated!', '🆔');
-                } catch (e) {
-                    showToast('Error updating Order ID', '❌');
-                }
-            } else {
-                exchanges = exchanges.map(item => {
-                    if (item.id === id) {
-                        return { ...item, orderNum: value.trim() };
-                    }
-                    return item;
-                });
-                saveToLocalStorage();
-                renderData();
+            try {
+                await apiRequest('update', { id, updates: { orderNum: value.trim() } });
                 showToast('Order ID updated!', '🆔');
+            } catch (error) {
+                showToast(error.message || 'Error updating Order ID', '❌');
             }
         }
 
@@ -1553,56 +1348,28 @@
             if (!target) return;
 
             const nextStatus = target.status === 'done' ? 'processing' : 'done';
-            const msg = nextStatus === 'done' ? 'Successfully replaced! ✅' : 'Changed to Processing 🔄';
+            const message = nextStatus === 'done' ? 'Successfully replaced! ✅' : 'Changed to Processing 🔄';
 
-            if (usingCloud) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
-                    await updateDoc(docRef, { status: nextStatus });
-                    showToast(msg);
-                } catch (e) {
-                    showToast('Error updating status', '❌');
-                }
-            } else {
-                exchanges = exchanges.map(item => {
-                    if (item.id === id) {
-                        return { ...item, status: nextStatus };
-                    }
-                    return item;
-                });
-                saveToLocalStorage();
-                renderData();
-                showToast(msg);
+            try {
+                await apiRequest('update', { id, updates: { status: nextStatus } });
+                showToast(message);
+            } catch (error) {
+                showToast(error.message || 'Error updating status', '❌');
             }
         }
 
         // Fast Tracking Update for both Return and New Postage Out Tracking
         async function updateTracking(id, value, type) {
             const updateField = type === 'return' ? 'trackingNum' : 'newTrackingNum';
-            const msg = type === 'return' ? 'Return tracking updated!' : 'New outgoing tracking updated!';
+            const message = type === 'return' ? 'Return tracking updated!' : 'New outgoing tracking updated!';
+            const updates = {};
+            updates[updateField] = value.trim();
 
-            if (usingCloud) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'exchanges', id);
-                    const updateObj = {};
-                    updateObj[updateField] = value.trim();
-                    await updateDoc(docRef, updateObj);
-                    showToast(msg, '📦');
-                } catch (e) {
-                    showToast('Error updating tracking number', '❌');
-                }
-            } else {
-                exchanges = exchanges.map(item => {
-                    if (item.id === id) {
-                        const updatedItem = { ...item };
-                        updatedItem[updateField] = value.trim();
-                        return updatedItem;
-                    }
-                    return item;
-                });
-                saveToLocalStorage();
-                renderData();
-                showToast(msg, '📦');
+            try {
+                await apiRequest('update', { id, updates });
+                showToast(message, '📦');
+            } catch (error) {
+                showToast(error.message || 'Error updating tracking number', '❌');
             }
         }
 
@@ -1642,47 +1409,42 @@
             }
         }
 
-        // Custom Firebase Config Panel Actions
-        function toggleFirebaseSettings() {
-            const panel = document.getElementById('firebase-settings-panel');
-            panel.classList.toggle('hidden');
+        // Google Sheets access settings
+        function toggleAccessSettings() {
+            document.getElementById('access-settings-panel').classList.toggle('hidden');
         }
 
-        function saveFirebaseConfig() {
-            const configText = document.getElementById('firebase-config-input').value.trim();
-            if (!configText) {
-                showToast('Please enter a valid Firebase JSON configuration.', '❌');
+        async function saveAdminAccess() {
+            const key = document.getElementById('admin-access-key').value.trim();
+            if (!key) {
+                showToast('Enter the Admin Access Key from the Settings tab.', '🔒');
                 return;
             }
 
+            adminAccessKey = key;
+            sessionStorage.setItem('nostalgya_admin_access_key', key);
             try {
-                const parsed = JSON.parse(configText);
-                if (!parsed.apiKey || !parsed.projectId) {
-                    showToast('Incomplete config! Ensure it has apiKey & projectId.', '⚠️');
-                    return;
+                await setupSystem();
+                if (usingCloud) {
+                    document.getElementById('access-settings-panel').classList.add('hidden');
+                    document.getElementById('admin-access-key').value = '';
+                    showToast('Google Sheets connected.', '✅');
                 }
-
-                localStorage.setItem('nostalgya_custom_firebase_config', configText);
-                showToast('Configuration saved! Reconnecting...', '🔄');
-                toggleFirebaseSettings();
-                setupSystem();
-            } catch (err) {
-                showToast('Invalid JSON format! Paste the raw config block.', '❌');
+            } catch (error) {
+                showToast(error.message || 'Unable to connect.', '❌');
             }
         }
 
-        function resetToLocal() {
-            localStorage.removeItem('nostalgya_custom_firebase_config');
-            document.getElementById('firebase-config-input').value = '';
-            showToast('Reverted to Local Storage.', '🧹');
-            toggleFirebaseSettings();
-            
-            if (unsubscribeExchanges) {
-                unsubscribeExchanges();
-                unsubscribeExchanges = null;
-            }
-            
-            fallbackToLocalStorage();
+        function disconnectAdminAccess() {
+            adminAccessKey = '';
+            usingCloud = false;
+            exchanges = [];
+            sessionStorage.removeItem('nostalgya_admin_access_key');
+            document.getElementById('admin-access-key').value = '';
+            document.getElementById('access-settings-panel').classList.remove('hidden');
+            updateConnectionStatus('locked', 'Admin Access Required');
+            renderData();
+            showToast('Google Sheets session disconnected.', '🔒');
         }
 
         function clearAllData() {
@@ -1715,9 +1477,9 @@
         window.clearAllData = clearAllData;
         window.updateNotes = updateNotes;
         window.updateOrderNum = updateOrderNum;
-        window.toggleFirebaseSettings = toggleFirebaseSettings;
-        window.saveFirebaseConfig = saveFirebaseConfig;
-        window.resetToLocal = resetToLocal;
+        window.toggleAccessSettings = toggleAccessSettings;
+        window.saveAdminAccess = saveAdminAccess;
+        window.disconnectAdminAccess = disconnectAdminAccess;
         window.toggleSidebar = toggleSidebar;
         window.switchTab = switchTab;
 
