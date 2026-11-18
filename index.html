@@ -172,45 +172,15 @@
                             <input type="text" id="order-num" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm">
                         </div>
 
-                        <!-- ORIGINAL ITEM INFO -->
+                        
+                        <!-- ORIGINAL RETURNED ITEMS -->
                         <div class="border-t border-stone-100 pt-4">
-                            <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="product-original-select">Original Returned Item <span class="text-red-500">*</span></label>
-                            <select id="product-original-select" required onchange="handleProductChange('original', this.value)" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm cursor-pointer">
-                                <option value="" disabled selected>Select Product...</option>
-                                <option value="Wide Cut Trousers">Wide Cut Trousers</option>
-                                <option value="studio trousers">studio trousers</option>
-                                <option value="Slim Fit Tee">Slim Fit Tee</option>
-                                <option value="Vintage Tee">Vintage Tee</option>
-                                <option value="Muscle Tee">Muscle Tee</option>
-                                <option value="Overlay Tee">Overlay Tee</option>
-                                <option value="Black Jacket">Black Jacket</option>
-                                <option value="Wool Sweater (Grey)">Wool Sweater (Grey)</option>
-                                <option value="Wool Sweater (Black)">Wool Sweater (Black)</option>
-                                <option value="Card Holder">Card Holder</option>
-                                <option value="Journal">Journal</option>
-                                <option value="Distressed Quarter Zip">Distressed Quarter Zip</option>
-                                <option value="Distressed Raglan Tee">Distressed Raglan Tee</option>
-                                <option value="Distressed Sweat Pants">Distressed Sweat Pants</option>
-                                <option value="Distressed Socks">Distressed Socks</option>
-                                <option value="Slim Tee Logo">Slim Tee Logo</option>
-                                <option value="custom">Other / Custom...</option>
-                            </select>
-                            
-                            <div id="custom-original-container" class="hidden mt-2">
-                                <input type="text" id="product-original-custom" class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none text-sm" placeholder="Type custom product name">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="block text-xs font-semibold text-stone-600 uppercase tracking-wider">Original Returned Items <span class="text-red-500">*</span></span>
+                                <span class="text-[9px] text-stone-400 font-semibold">Add every item received</span>
                             </div>
-                        </div>
-
-                        <!-- SIZES GRID -->
-                        <div class="grid grid-cols-2 gap-3" id="standard-sizing-row">
-                            <div>
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-original">Original Size <span class="text-red-500">*</span></label>
-                                <input type="text" id="size-original" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="e.g. XL">
-                            </div>
-                            <div id="standard-exchange-size-wrapper">
-                                <label class="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-1" for="size-new">Exchange Size <span class="text-red-500">*</span></label>
-                                <input type="text" id="size-new" required class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 focus:bg-white transition-all text-sm" placeholder="e.g. XXL">
-                            </div>
+                            <div id="original-items-container" class="space-y-3"></div>
+                            <button type="button" onclick="addOriginalItemRow()" class="mt-2 w-full py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 text-xs font-bold rounded-xl transition-colors flex items-center justify-center">➕ Add Another Returned Item</button>
                         </div>
 
                         <!-- PRODUCT EXCHANGE TOGGLE -->
@@ -501,7 +471,8 @@
             document.getElementById('confirm-cancel-btn').addEventListener('click', hideConfirmModal);
             document.getElementById('confirm-ok-btn').addEventListener('click', executeConfirmedAction);
 
-            // Populate initial dynamic replacement row
+            // Populate initial returned and replacement rows
+            addOriginalItemRow();
             addReplacementRow();
         };
 
@@ -616,10 +587,14 @@
             document.getElementById('report-completion-rate').innerText = `${rate}%`;
 
             // Calculate top product returned
+
             const productCounts = {};
             exchanges.forEach(item => {
-                const p = item.productOriginal || 'Product';
-                productCounts[p] = (productCounts[p] || 0) + 1;
+                getNormalizedOriginalItems(item).forEach(original => {
+                    const product = original.product || 'Product';
+                    const qty = parseInt(original.qty, 10) || 1;
+                    productCounts[product] = (productCounts[product] || 0) + qty;
+                });
             });
             let topProduct = 'No Data';
             let maxProdCount = 0;
@@ -788,58 +763,95 @@
             });
         }
 
-        // Handle Custom Product dropdown logic
+
+        // Shared product catalogue for returned and replacement items
+        const PRODUCT_OPTIONS = [
+            'Wide Cut Trousers', 'studio trousers', 'Slim Fit Tee', 'Vintage Tee',
+            'Muscle Tee', 'Overlay Tee', 'Black Jacket', 'Wool Sweater (Grey)',
+            'Wool Sweater (Black)', 'Card Holder', 'Journal', 'Distressed Quarter Zip',
+            'Distressed Raglan Tee', 'Distressed Sweat Pants', 'Distressed Socks', 'Slim Tee Logo'
+        ];
+
+        function buildProductOptions(placeholder) {
+            return '<option value="" disabled selected>' + placeholder + '</option>' +
+                PRODUCT_OPTIONS.map(product => '<option value="' + product + '">' + product + '</option>').join('') +
+                '<option value="custom">Other / Custom...</option>';
+        }
+
         function handleProductChange(type, val, selectElement) {
-            let container, input;
-            if (type === 'original') {
-                container = document.getElementById('custom-original-container');
-                input = document.getElementById('product-original-custom');
-                if (val === 'custom') {
-                    container.classList.remove('hidden');
-                    input.setAttribute('required', 'true');
-                } else {
-                    container.classList.add('hidden');
-                    input.removeAttribute('required');
-                    input.value = '';
-                }
-            } else if (type === 'replacement') {
-                // Find corresponding custom input container in the same dynamic row
-                const row = selectElement.closest('.replacement-row');
-                const customContainer = row.querySelector('.custom-replacement-container');
-                const customInput = row.querySelector('.custom-replacement-input');
-                if (val === 'custom') {
-                    customContainer.classList.remove('hidden');
-                    customInput.setAttribute('required', 'true');
-                } else {
-                    customContainer.classList.add('hidden');
-                    customInput.removeAttribute('required');
-                    customInput.value = '';
-                }
+            const row = selectElement.closest(type === 'original' ? '.original-item-row' : '.replacement-row');
+            if (!row) return;
+            const customContainer = row.querySelector(type === 'original' ? '.custom-original-container' : '.custom-replacement-container');
+            const customInput = row.querySelector(type === 'original' ? '.custom-original-input' : '.custom-replacement-input');
+            if (val === 'custom') {
+                customContainer.classList.remove('hidden');
+                customInput.setAttribute('required', 'true');
+            } else {
+                customContainer.classList.add('hidden');
+                customInput.removeAttribute('required');
+                customInput.value = '';
             }
         }
 
         // Toggle "Exchange for a different product / multiple items" section
+
         function toggleProductChangeSection(isChecked) {
             const section = document.getElementById('product-change-section');
-            const standardExchangeWrapper = document.getElementById('standard-exchange-size-wrapper');
-            const standardSizingInput = document.getElementById('size-new');
-            
+            document.querySelectorAll('.original-exchange-size-wrapper').forEach(wrapper => {
+                const input = wrapper.querySelector('.original-exchange-size');
+                wrapper.classList.toggle('hidden', isChecked);
+                if (isChecked) input.removeAttribute('required');
+                else input.setAttribute('required', 'true');
+            });
             if (isChecked) {
                 section.classList.remove('hidden');
-                // Hide standard single sizing inputs since we're using dynamic multi-item rows
-                standardExchangeWrapper.classList.add('hidden');
-                standardSizingInput.removeAttribute('required');
-                
-                // Ensure at least one dynamic row exists
-                const container = document.getElementById('replacement-items-container');
-                if (container.children.length === 0) {
-                    addReplacementRow();
-                }
+                if (document.getElementById('replacement-items-container').children.length === 0) addReplacementRow();
             } else {
                 section.classList.add('hidden');
-                standardExchangeWrapper.classList.remove('hidden');
-                standardSizingInput.setAttribute('required', 'true');
             }
+        }
+
+        let originalRowCounter = 0;
+        function addOriginalItemRow() {
+            const container = document.getElementById('original-items-container');
+            const rowId = 'original-row-' + originalRowCounter++;
+            const div = document.createElement('div');
+            div.className = 'original-item-row bg-stone-50 border border-stone-200 p-4 rounded-xl relative space-y-2';
+            div.id = rowId;
+            div.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Returned Item</span>
+                    <button type="button" onclick="removeOriginalItemRow('${rowId}')" class="text-xs text-red-500 hover:text-red-700 font-semibold">✕ Remove</button>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Product Name</label>
+                    <select class="original-product-select w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs cursor-pointer focus:outline-none" required></select>
+                    <div class="custom-original-container hidden mt-2"><input type="text" class="custom-original-input w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs" placeholder="Type custom product name"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div><label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Original Size</label><input type="text" class="original-size w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs uppercase" placeholder="XL" required></div>
+                    <div class="original-exchange-size-wrapper"><label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Exchange Size</label><input type="text" class="original-exchange-size w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs uppercase" placeholder="XXL" required></div>
+                    <div><label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wide mb-1">Qty</label><input type="number" class="original-qty w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs text-center" value="1" min="1" max="999" required></div>
+                </div>
+            `;
+            container.appendChild(div);
+            const select = div.querySelector('.original-product-select');
+            select.innerHTML = buildProductOptions('Select Product...');
+            select.addEventListener('change', event => handleProductChange('original', event.target.value, event.target));
+            if (document.getElementById('toggle-product-change').checked) {
+                const wrapper = div.querySelector('.original-exchange-size-wrapper');
+                wrapper.classList.add('hidden');
+                wrapper.querySelector('.original-exchange-size').removeAttribute('required');
+            }
+        }
+
+        function removeOriginalItemRow(rowId) {
+            if (document.querySelectorAll('.original-item-row').length <= 1) {
+                showToast('At least one returned item is required.', '❌');
+                return;
+            }
+            const row = document.getElementById(rowId);
+            if (row) row.remove();
         }
 
         // Dynamic replacement products list logic
@@ -926,15 +938,21 @@
             const orderNum = document.getElementById('order-num').value.trim();
             const notes = document.getElementById('exchange-notes').value.trim();
             
-            // Get original product
-            const origSelect = document.getElementById('product-original-select').value;
-            let productOriginal = origSelect;
-            if (origSelect === 'custom') {
-                productOriginal = document.getElementById('product-original-custom').value.trim();
-                if (!productOriginal) productOriginal = "Custom Product";
-            }
 
-            const sizeOriginal = document.getElementById('size-original').value.trim().toUpperCase();
+            // Collect every original returned item
+            const originalRows = Array.from(document.querySelectorAll('.original-item-row'));
+            const originalItems = originalRows.map(row => {
+                const selectValue = row.querySelector('.original-product-select').value;
+                const product = selectValue === 'custom' ? row.querySelector('.custom-original-input').value.trim() : selectValue;
+                return {
+                    product: product || 'Custom Product',
+                    size: row.querySelector('.original-size').value.trim().toUpperCase(),
+                    qty: parseInt(row.querySelector('.original-qty').value, 10) || 1
+                };
+            });
+            const productOriginal = originalItems[0].product;
+            const sizeOriginal = originalItems[0].size;
+
             const awbFile = document.getElementById('return-awb-file').files[0] || null;
             const trackingNum = '';
             const newTrackingNum = document.getElementById('new-tracking-num').value.trim();
@@ -964,14 +982,13 @@
                         size: size
                     });
                 });
+
             } else {
-                // Default: same item, single exchange size
-                const sizeNew = document.getElementById('size-new').value.trim().toUpperCase();
-                replacements.push({
-                    product: productOriginal,
-                    qty: 1,
-                    size: sizeNew
-                });
+                replacements = originalRows.map((row, index) => ({
+                    product: originalItems[index].product,
+                    qty: originalItems[index].qty,
+                    size: row.querySelector('.original-exchange-size').value.trim().toUpperCase()
+                }));
             }
 
             // Ensure we have at least 1 replacement
@@ -985,6 +1002,7 @@
                 orderNum,
                 productOriginal,
                 sizeOriginal,
+                originalItems,
                 replacements,
                 trackingNum,
                 returnAwbUrl: '',
@@ -1019,16 +1037,22 @@
             }
             
             // Reset Form and dynamic elements
+
             document.getElementById('exchange-form').reset();
             document.getElementById('return-awb-file-name').textContent = 'Image or PDF, maximum 10 MB.';
-            document.getElementById('custom-original-container').classList.add('hidden');
+            document.getElementById('original-items-container').innerHTML = '';
             document.getElementById('replacement-items-container').innerHTML = '';
             document.getElementById('product-change-section').classList.add('hidden');
-            document.getElementById('standard-exchange-size-wrapper').classList.remove('hidden');
-            document.getElementById('size-new').setAttribute('required', 'true');
-            
-            // Re-initialize 1 empty replacement row
+            originalRowCounter = 0;
+            replacementRowCounter = 0;
+            addOriginalItemRow();
             addReplacementRow();
+        }
+
+
+        function getNormalizedOriginalItems(item) {
+            if (Array.isArray(item.originalItems) && item.originalItems.length > 0) return item.originalItems;
+            return item.productOriginal ? [{ product: item.productOriginal, size: item.sizeOriginal || 'N/A', qty: 1 }] : [];
         }
 
         // Helper to normalize replacements for backward-compatible logs
@@ -1136,7 +1160,7 @@
                 filtered = filtered.filter(item => 
                     item.name.toLowerCase().includes(searchVal) || 
                     item.orderNum.toLowerCase().includes(searchVal) ||
-                    (item.productOriginal && item.productOriginal.toLowerCase().includes(searchVal)) ||
+                    getNormalizedOriginalItems(item).some(original => (original.product || '').toLowerCase().includes(searchVal)) ||
                     (item.notes && item.notes.toLowerCase().includes(searchVal)) ||
                     (item.trackingNum && item.trackingNum.toLowerCase().includes(searchVal)) ||
                     (item.newTrackingNum && item.newTrackingNum.toLowerCase().includes(searchVal))
@@ -1166,45 +1190,23 @@
                         <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500 animate-pulse"></span>Processing
                        </span>`;
 
-                const origProd = item.productOriginal || 'Product';
-                const origSize = item.sizeOriginal || 'N/A';
 
-                // Render Multi-Item Replacements list dynamically inside the column cell
+                const originalItemsList = getNormalizedOriginalItems(item);
+                const origProd = originalItemsList[0] ? originalItemsList[0].product : (item.productOriginal || 'Product');
                 const replacementsList = getNormalizedReplacements(item);
-                
-                let detailsMarkup = `
-                    <div class="flex flex-col space-y-1.5">
-                        <div class="bg-stone-100 text-stone-600 px-2.5 py-1.5 rounded-lg border border-stone-200">
-                            <span class="text-[9px] font-bold uppercase tracking-wider block text-stone-400 mb-0.5">Customer Returned:</span>
-                            <span class="text-xs font-bold text-stone-700">${escapeHtml(origProd)}</span>
-                            <span class="inline-block bg-stone-200 text-stone-800 text-[10px] font-extrabold px-1.5 py-0.2 rounded ml-1.5">${escapeHtml(origSize)}</span>
-                        </div>
-                        <div class="space-y-1">
-                            <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider block">Fulfillment Swaps:</span>
-                            <div class="space-y-1">
-                `;
 
+                let detailsMarkup = '<div class="flex flex-col space-y-1.5"><div class="bg-stone-100 text-stone-600 px-2.5 py-1.5 rounded-lg border border-stone-200"><span class="text-[9px] font-bold uppercase tracking-wider block text-stone-400 mb-1">Customer Returned:</span><div class="space-y-1">';
+                originalItemsList.forEach(original => {
+                    detailsMarkup += `<div class="flex items-center justify-between gap-2 bg-white/70 rounded px-2 py-1"><span class="text-[8px] font-extrabold text-stone-400">x${original.qty || 1}</span><span class="text-xs font-bold text-stone-700 flex-1 truncate" title="${escapeHtml(original.product)}">${escapeHtml(original.product)}</span><span class="inline-block bg-stone-200 text-stone-800 text-[10px] font-extrabold px-1.5 rounded">${escapeHtml(original.size || 'N/A')}</span></div>`;
+                });
+                detailsMarkup += '</div></div><div class="space-y-1"><span class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider block">Fulfillment Swaps:</span><div class="space-y-1">';
                 replacementsList.forEach(rep => {
-                    const sameProduct = rep.product === origProd;
+                    const sameProduct = originalItemsList.some(original => original.product === rep.product);
                     const badgeClass = sameProduct ? 'bg-stone-900 text-white' : 'bg-amber-100 border border-amber-200 text-amber-900';
                     const badgePrefix = sameProduct ? '🔄 Size Swap' : '✨ Different Product';
-                    
-                    detailsMarkup += `
-                        <div class="flex items-center justify-between bg-white border border-stone-200 p-1.5 rounded-lg shadow-sm text-xs">
-                            <div class="flex flex-col">
-                                <span class="text-[8px] font-extrabold uppercase ${sameProduct ? 'text-stone-400' : 'text-amber-600'}">${badgePrefix} (x${rep.qty || 1})</span>
-                                <span class="font-semibold text-stone-800 truncate max-w-[150px]" title="${escapeHtml(rep.product)}">${escapeHtml(rep.product)}</span>
-                            </div>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold ${badgeClass}">${escapeHtml(rep.size)}</span>
-                        </div>
-                    `;
+                    detailsMarkup += `<div class="flex items-center justify-between bg-white border border-stone-200 p-1.5 rounded-lg shadow-sm text-xs"><div class="flex flex-col"><span class="text-[8px] font-extrabold uppercase ${sameProduct ? 'text-stone-400' : 'text-amber-600'}">${badgePrefix} (x${rep.qty || 1})</span><span class="font-semibold text-stone-800 truncate max-w-[150px]" title="${escapeHtml(rep.product)}">${escapeHtml(rep.product)}</span></div><span class="px-2 py-0.5 rounded text-[10px] font-extrabold ${badgeClass}">${escapeHtml(rep.size)}</span></div>`;
                 });
-
-                detailsMarkup += `
-                            </div>
-                        </div>
-                    </div>
-                `;
+                detailsMarkup += '</div></div></div>';
 
                 const returnAwbUrl = /^https:\/\/drive\.google\.com\//.test(item.returnAwbUrl || '') ? item.returnAwbUrl : '';
 
@@ -1557,6 +1559,8 @@
         // Expose functions globally to be used by elements outside modular scope
         window.handleProductChange = handleProductChange;
         window.toggleProductChangeSection = toggleProductChangeSection;
+        window.addOriginalItemRow = addOriginalItemRow;
+        window.removeOriginalItemRow = removeOriginalItemRow;
         window.addReplacementRow = addReplacementRow;
         window.removeReplacementRow = removeReplacementRow;
         window.handleFormSubmit = handleFormSubmit;
