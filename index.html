@@ -278,8 +278,8 @@
 
                     <!-- Status Filter Buttons -->
                     <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl text-xs font-medium">
-                        <button onclick="setStatusFilter('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm">All</button>
-                        <button onclick="setStatusFilter('processing')" id="btn-filter-processing" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Processing</button>
+                        <button onclick="setStatusFilter('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">All</button>
+                        <button onclick="setStatusFilter('processing')" id="btn-filter-processing" class="px-3 py-1.5 rounded-lg transition-all bg-white text-stone-800 shadow-sm">Processing</button>
                         <button onclick="setStatusFilter('done')" id="btn-filter-done" class="px-3 py-1.5 rounded-lg transition-all text-stone-600 hover:text-stone-800">Done Replace</button>
                     </div>
                 </div>
@@ -435,7 +435,7 @@
     <!-- GOOGLE SHEETS SYSTEM LOGIC -->
     <script>
         let exchanges = [];
-        let currentFilter = 'all';
+        let currentFilter = 'processing';
         let pendingDeleteId = null;
         let isDeleteAll = false;
         let activeTab = 'records';
