@@ -293,7 +293,7 @@
                                 ➕ Add Record
                             </button>
                         </div>
-                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors">Delete All Data</button>
+                        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors" title="Password required">🔒 Delete All Data</button>
                     </div>
                     
                     <div class="overflow-x-auto">
@@ -1471,6 +1471,15 @@
         }
 
         function clearAllData() {
+            const password = window.prompt('Enter password to delete all records:');
+
+            if (password === null) return;
+
+            if (password !== '1234') {
+                showToast('Incorrect password. No records were deleted.', '🔒');
+                return;
+            }
+
             showConfirmModal('WARNING: This will permanently delete all records from storage!', true);
         }
 
