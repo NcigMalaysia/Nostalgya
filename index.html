@@ -300,14 +300,13 @@
                         <table class="w-full text-left border-collapse min-w-[1100px]">
                             <thead>
                                 <tr class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wider font-semibold border-b border-stone-100">
-                                    <th class="px-6 py-3.5" style="width: 15%;">Customer</th>
-                                    <th class="px-4 py-3.5" style="width: 10%;">Order ID</th>
-                                    <th class="px-4 py-3.5" style="width: 20%;">Operations Notes</th>
-                                    <th class="px-4 py-3.5" style="width: 24%;">Exchange Details</th>
-                                    <th class="px-4 py-3.5" style="width: 13%;">Return Tracking</th>
-                                    <th class="px-4 py-3.5 text-center" style="width: 5%;">Status</th>
-                                    <th class="px-4 py-3.5" style="width: 13%;">New Tracking</th>
-                                    <th class="px-6 py-3.5 text-right" style="width: 2%;">Actions</th>
+                                    <th class="px-6 py-3.5" style="width: 16%;">Customer</th>
+                                    <th class="px-4 py-3.5" style="width: 12%;">Order ID</th>
+                                    <th class="px-4 py-3.5" style="width: 28%;">Exchange Details</th>
+                                    <th class="px-4 py-3.5" style="width: 14%;">Return Tracking</th>
+                                    <th class="px-4 py-3.5 text-center" style="width: 8%;">Status</th>
+                                    <th class="px-4 py-3.5" style="width: 15%;">New Tracking</th>
+                                    <th class="px-6 py-3.5 text-right" style="width: 7%;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="orders-tbody" class="divide-y divide-stone-100 text-sm">
@@ -1209,14 +1208,6 @@
                             class="bg-transparent border-b border-dashed border-stone-300 focus:border-solid focus:border-stone-800 focus:outline-none py-0.5 text-xs text-stone-700 font-bold w-full transition-all order-id-input">
                     </td>
                     <td class="px-4 py-4 align-top">
-                        <textarea 
-                            data-id="${item.id}"
-                            placeholder="Click to add note..."
-                            class="w-full bg-amber-50/20 hover:bg-amber-50/50 focus:bg-white text-xs text-stone-700 p-2 rounded-xl border border-dashed border-stone-200 hover:border-amber-300/80 focus:border-amber-400 focus:outline-none transition-all resize-none font-medium placeholder-stone-400/80 notes-textarea"
-                            rows="2"
-                        >${escapeHtml(item.notes || '')}</textarea>
-                    </td>
-                    <td class="px-4 py-4 align-top">
                         ${detailsMarkup}
                     </td>
                     <!-- Return Tracking (Customer -> Us) -->
@@ -1271,6 +1262,25 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
+
+                const notesTr = document.createElement('tr');
+                notesTr.className = 'bg-stone-50/60 border-b border-stone-100';
+                notesTr.innerHTML = `
+                    <td colspan="7" class="px-6 pt-2 pb-5">
+                        <div class="rounded-xl border border-stone-200 bg-white p-3 shadow-sm">
+                            <label class="block text-[9px] font-extrabold uppercase tracking-wider text-stone-500 mb-1.5">
+                                Operations Notes
+                            </label>
+                            <textarea
+                                data-id="${item.id}"
+                                placeholder="Click to add operations notes..."
+                                class="w-full min-h-[76px] bg-stone-50 hover:bg-white focus:bg-white text-sm text-stone-700 p-3 rounded-lg border border-stone-200 focus:border-amber-400 focus:outline-none transition-all resize-y notes-textarea"
+                                rows="3"
+                            >${escapeHtml(item.notes || '')}</textarea>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(notesTr);
             });
 
             // Rebind DOM event listeners
