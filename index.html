@@ -467,9 +467,10 @@
             document.getElementById('confirm-cancel-btn').addEventListener('click', hideConfirmModal);
             document.getElementById('confirm-ok-btn').addEventListener('click', executeConfirmedAction);
 
-            // Populate initial returned and replacement rows
+            // Populate the initial returned item only.
+            // Replacement rows are created only when the toggle is enabled,
+            // otherwise hidden required fields block the browser's form submission.
             addOriginalItemRow();
-            addReplacementRow();
         };
 
         // Google Sheets API setup
@@ -801,9 +802,13 @@
             });
             if (isChecked) {
                 section.classList.remove('hidden');
-                if (document.getElementById('replacement-items-container').children.length === 0) addReplacementRow();
+                if (document.getElementById('replacement-items-container').children.length === 0) {
+                    addReplacementRow();
+                }
             } else {
                 section.classList.add('hidden');
+                document.getElementById('replacement-items-container').innerHTML = '';
+                replacementRowCounter = 0;
             }
         }
 
@@ -1032,7 +1037,6 @@
             originalRowCounter = 0;
             replacementRowCounter = 0;
             addOriginalItemRow();
-            addReplacementRow();
         }
 
 
