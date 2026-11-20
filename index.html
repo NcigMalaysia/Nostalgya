@@ -133,7 +133,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                             </svg>
-                            <h2 class="text-lg font-bold text-stone-800">Add Record</h2>
+                            <h2 id="form-title" class="text-lg font-bold text-stone-800">Add Record</h2>
                         </div>
                         
                         <!-- Secure Google Sheets access settings -->
@@ -240,12 +240,17 @@
     </p>
 </div>
 
-                        <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2 text-sm mt-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            <span>Save Record</span>
-                        </button>
+                        <div class="flex gap-2 mt-6">
+                            <button id="cancel-edit-btn" type="button" onclick="cancelEditRecord()" class="hidden w-1/3 bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold py-3 px-4 rounded-xl transition-colors text-sm">
+                                Cancel
+                            </button>
+                            <button id="save-record-btn" type="submit" class="flex-1 bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span id="save-record-label">Save Record</span>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -438,6 +443,7 @@
         let currentFilter = 'processing';
         let pendingDeleteId = null;
         let isDeleteAll = false;
+        let editingRecordId = null;
         let activeTab = 'records';
         
         // Chart instances
@@ -843,6 +849,7 @@
                 wrapper.classList.add('hidden');
                 wrapper.querySelector('.original-exchange-size').removeAttribute('required');
             }
+            return div;
         }
 
         function removeOriginalItemRow(rowId) {
@@ -921,6 +928,7 @@
             selectEl.addEventListener('change', (e) => {
                 handleProductChange('replacement', e.target.value, e.target);
             });
+            return div;
         }
 
         function removeReplacementRow(rowId) {
@@ -996,7 +1004,11 @@
                 return;
             }
             
-            const newExchange = {
+            const existingRecord = editingRecordId
+                ? exchanges.find(item => item.id === editingRecordId)
+                : null;
+
+            const recordData = {
                 name,
                 orderNum,
                 productOriginal,
@@ -1007,8 +1019,8 @@
                 newTrackingNum,
                 notes,
                 status,
-                date: new Date().toISOString().split('T')[0],
-                createdAt: Date.now()
+                date: existingRecord?.date || new Date().toISOString().split('T')[0],
+                createdAt: existingRecord?.createdAt || Date.now()
             };
 
             if (!adminAccessKey) {
@@ -1018,24 +1030,123 @@
             }
 
             try {
-                newExchange.id = Date.now().toString();
-                await apiRequest('add', { record: newExchange });
-                showToast('Record successfully saved to Google Sheets!', '✅');
+                if (editingRecordId) {
+                    await apiRequest('update', {
+                        id: editingRecordId,
+                        updates: recordData
+                    });
+                    showToast('Record successfully updated!', '✅');
+                } else {
+                    recordData.id = Date.now().toString();
+                    await apiRequest('add', { record: recordData });
+                    showToast('Record successfully saved to Google Sheets!', '✅');
+                }
             } catch (error) {
                 console.error('Save error:', error);
                 showToast(error.message || 'Unable to save record.', '❌');
                 return;
             }
-            
-            // Reset Form and dynamic elements
 
+            resetExchangeForm();
+        }
+
+        function resetExchangeForm() {
+            editingRecordId = null;
             document.getElementById('exchange-form').reset();
             document.getElementById('original-items-container').innerHTML = '';
             document.getElementById('replacement-items-container').innerHTML = '';
             document.getElementById('product-change-section').classList.add('hidden');
+            document.getElementById('form-title').textContent = 'Add Record';
+            document.getElementById('save-record-label').textContent = 'Save Record';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
             originalRowCounter = 0;
             replacementRowCounter = 0;
             addOriginalItemRow();
+        }
+
+        function setRowProduct(row, type, product) {
+            const isOriginal = type === 'original';
+            const select = row.querySelector(isOriginal ? '.original-product-select' : '.replacement-product-select');
+            const customInput = row.querySelector(isOriginal ? '.custom-original-input' : '.custom-replacement-input');
+
+            if (PRODUCT_OPTIONS.includes(product)) {
+                select.value = product;
+                handleProductChange(type, product, select);
+            } else {
+                select.value = 'custom';
+                handleProductChange(type, 'custom', select);
+                customInput.value = product || '';
+            }
+        }
+
+        function editRecord(id) {
+            const item = exchanges.find(record => record.id === id);
+            if (!item) {
+                showToast('Record not found.', '❌');
+                return;
+            }
+
+            editingRecordId = id;
+            toggleSidebar(true);
+
+            document.getElementById('cust-name').value = item.name || '';
+            document.getElementById('order-num').value = item.orderNum || '';
+            document.getElementById('exchange-notes').value = item.notes || '';
+            document.getElementById('return-tracking-num').value = item.trackingNum || '';
+            document.getElementById('new-tracking-num').value = item.newTrackingNum || '';
+            document.getElementById('status-select').value = item.status || 'processing';
+
+            const originalItems = getNormalizedOriginalItems(item);
+            const replacements = getNormalizedReplacements(item);
+            const usesSeparateReplacementRows =
+                replacements.length !== originalItems.length ||
+                replacements.some((replacement, index) => {
+                    const original = originalItems[index];
+                    return !original ||
+                        replacement.product !== original.product ||
+                        Number(replacement.qty || 1) !== Number(original.qty || 1);
+                });
+
+            document.getElementById('original-items-container').innerHTML = '';
+            document.getElementById('replacement-items-container').innerHTML = '';
+            originalRowCounter = 0;
+            replacementRowCounter = 0;
+
+            const toggle = document.getElementById('toggle-product-change');
+            toggle.checked = usesSeparateReplacementRows;
+
+            originalItems.forEach((original, index) => {
+                const row = addOriginalItemRow();
+                setRowProduct(row, 'original', original.product || '');
+                row.querySelector('.original-size').value = original.size || '';
+                row.querySelector('.original-qty').value = original.qty || 1;
+                if (!usesSeparateReplacementRows) {
+                    row.querySelector('.original-exchange-size').value = replacements[index]?.size || '';
+                }
+            });
+
+            toggleProductChangeSection(usesSeparateReplacementRows);
+
+            if (usesSeparateReplacementRows) {
+                document.getElementById('replacement-items-container').innerHTML = '';
+                replacementRowCounter = 0;
+                replacements.forEach(replacement => {
+                    const row = addReplacementRow();
+                    setRowProduct(row, 'replacement', replacement.product || '');
+                    row.querySelector('.replacement-size').value = replacement.size || '';
+                    row.querySelector('.replacement-qty').value = replacement.qty || 1;
+                });
+            }
+
+            document.getElementById('form-title').textContent = 'Edit Record';
+            document.getElementById('save-record-label').textContent = 'Save Changes';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('sidebar-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function cancelEditRecord() {
+            resetExchangeForm();
+            showToast('Edit cancelled.', '↩️');
         }
 
 
@@ -1248,6 +1359,11 @@
                     </td>
                     <td class="px-6 py-4 text-right align-top">
                         <div class="flex items-center justify-end space-x-2">
+                            <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors edit-record-btn" title="Edit Record">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l6.586-6.586z" />
+                                </svg>
+                            </button>
                             <button data-id="${item.id}" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition-colors toggle-status-btn-icon" title="Change Status">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
@@ -1312,6 +1428,12 @@
                 btn.addEventListener('click', (e) => {
                     const tracking = e.currentTarget.dataset.tracking;
                     copyToClipboard(tracking);
+                });
+            });
+
+            document.querySelectorAll('.edit-record-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    editRecord(e.currentTarget.dataset.id);
                 });
             });
 
@@ -1508,6 +1630,8 @@
         window.updateTracking = updateTracking;
         window.copyToClipboard = copyToClipboard;
         window.deleteRecord = deleteRecord;
+        window.editRecord = editRecord;
+        window.cancelEditRecord = cancelEditRecord;
         window.clearAllData = clearAllData;
         window.updateNotes = updateNotes;
         window.updateOrderNum = updateOrderNum;
